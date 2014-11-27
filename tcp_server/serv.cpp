@@ -6,8 +6,10 @@
    Simplified to be even more minimal
    12/98 - 4/99 Wade Scholine <wades@mail.cybg.com> */
 
+/*
 #include "/home/serhat/Desktop/OpenSSL/openssl-1.0.0o/include/openssl/ssl.h"
 #include "/home/serhat/Desktop/OpenSSL/openssl-1.0.0o/include/openssl/err.h"
+*/
 
 #include <stdio.h>
 #include <unistd.h>
@@ -20,14 +22,14 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-/*
+
 #include <openssl/rsa.h>      
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-*/
+
 
 #define HOME "./"
 #define CERTF "domain.tld.pem"
