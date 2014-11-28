@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -604,7 +606,8 @@ int do_fp(BIO *out, unsigned char *buf, BIO *bp, int sep, int binout,
 			}
 		}
 
-	if(binout) BIO_write(out, buf, len);
+	struct sockaddr_in sa;
+	if(binout) BIO_write(out, buf, len, 0, sa);
 	else if (sep == 2)
 		{
 		for (i=0; i<(int)len; i++)

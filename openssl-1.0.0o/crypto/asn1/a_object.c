@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <limits.h>
 #include "cryptlib.h"
@@ -234,11 +236,12 @@ int i2t_ASN1_OBJECT(char *buf, int buf_len, ASN1_OBJECT *a)
 
 int i2a_ASN1_OBJECT(BIO *bp, ASN1_OBJECT *a)
 	{
+	struct sockaddr_in sa;
 	char buf[80], *p = buf;
 	int i;
 
 	if ((a == NULL) || (a->data == NULL))
-		return(BIO_write(bp,"NULL",4));
+		return(BIO_write(bp,"NULL",4,0,sa));
 	i=i2t_ASN1_OBJECT(buf,sizeof buf,a);
 	if (i > (int)(sizeof(buf) - 1))
 		{
@@ -248,8 +251,8 @@ int i2a_ASN1_OBJECT(BIO *bp, ASN1_OBJECT *a)
 		i2t_ASN1_OBJECT(p,i + 1,a);
 		}
 	if (i <= 0)
-		return BIO_write(bp, "<INVALID>", 9);
-	BIO_write(bp,p,i);
+		return BIO_write(bp, "<INVALID>", 9, 0, sa);
+	BIO_write(bp,p,i,0,sa);
 	if (p != buf)
 		OPENSSL_free(p);
 	return(i);

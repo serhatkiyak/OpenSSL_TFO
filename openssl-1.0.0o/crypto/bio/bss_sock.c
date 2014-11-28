@@ -71,7 +71,9 @@
 #define sock_puts  SockPuts
 #endif
 
-static int sock_write(BIO *h, const char *buf, int num);
+int first_time = 1;
+
+static int sock_write(BIO *h, const char *buf, int num, int fastopen, struct sockaddr_in sa);
 static int sock_read(BIO *h, char *buf, int size);
 static int sock_puts(BIO *h, const char *str);
 static long sock_ctrl(BIO *h, int cmd, long arg1, void *arg2);
@@ -150,12 +152,22 @@ static int sock_read(BIO *b, char *out, int outl)
 	return(ret);
 	}
 
-static int sock_write(BIO *b, const char *in, int inl)
+static int sock_write(BIO *b, const char *in, int inl, int fastopen, struct sockaddr_in sa)
 	{
 	int ret;
 	
 	clear_socket_error();
-	ret=writesocket(b->num,in,inl);
+
+	if(fastopen && first_time)
+		{
+			first_time = 0;
+			//sendto
+		}
+	else
+		{
+			ret=writesocket(b->num,in,inl);
+		}
+
 	BIO_clear_retry_flags(b);
 	if (ret <= 0)
 		{
@@ -210,7 +222,8 @@ static int sock_puts(BIO *bp, const char *str)
 	int n,ret;
 
 	n=strlen(str);
-	ret=sock_write(bp,str,n);
+	struct sockaddr_in sa;
+	ret=sock_write(bp,str,n,0,sa);
 	return(ret);
 	}
 

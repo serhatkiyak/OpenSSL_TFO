@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/objects.h>
@@ -67,6 +69,8 @@
 
 /* Function definitions. */
 
+struct sockaddr_in sa;
+
 int TS_ASN1_INTEGER_print_bio(BIO *bio, const ASN1_INTEGER *num)
 	{
 	BIGNUM num_bn;
@@ -77,8 +81,8 @@ int TS_ASN1_INTEGER_print_bio(BIO *bio, const ASN1_INTEGER *num)
 	ASN1_INTEGER_to_BN(num, &num_bn);
 	if ((hex = BN_bn2hex(&num_bn))) 
 		{
-		result = BIO_write(bio, "0x", 2) > 0;
-		result = result && BIO_write(bio, hex, strlen(hex)) > 0;
+		result = BIO_write(bio, "0x", 2, 0, sa) > 0;
+		result = result && BIO_write(bio, hex, strlen(hex), 0, sa) > 0;
 		OPENSSL_free(hex);
 		}
 	BN_free(&num_bn);
@@ -91,8 +95,8 @@ int TS_OBJ_print_bio(BIO *bio, const ASN1_OBJECT *obj)
 	char obj_txt[128];
 
 	int len = OBJ_obj2txt(obj_txt, sizeof(obj_txt), obj, 0);
-	BIO_write(bio, obj_txt, len);
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, obj_txt, len, 0, sa);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	return 1;
 	}
@@ -117,7 +121,7 @@ int TS_ext_print_bio(BIO *bio, const STACK_OF(X509_EXTENSION) *extensions)
 			BIO_printf(bio, "%4s", "");
 			M_ASN1_OCTET_STRING_print(bio, ex->value);
 			}
-		BIO_write(bio, "\n", 1);
+		BIO_write(bio, "\n", 1, 0, sa);
 		}
 
 	return 1;

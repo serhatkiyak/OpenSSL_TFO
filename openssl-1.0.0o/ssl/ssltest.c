@@ -143,6 +143,8 @@
 #define _BSD_SOURCE 1		/* Or gethostname won't be declared properly
 				   on Linux and GNU platforms. */
 
+#include <netinet/in.h>
+
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
@@ -245,6 +247,8 @@ static unsigned int psk_client_callback(SSL *ssl, const char *hint, char *identi
 static unsigned int psk_server_callback(SSL *ssl, const char *identity, unsigned char *psk,
 	unsigned int max_psk_len);
 #endif
+
+struct sockaddr_in sa;
 
 static BIO *bio_err=NULL;
 static BIO *bio_stdout=NULL;
@@ -1126,7 +1130,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 					i = sizeof cbuf;
 				else
 					i = (int)cw_num;
-				r = BIO_write(c_ssl_bio, cbuf, i);
+				r = BIO_write(c_ssl_bio, cbuf, i, 0, sa);
 				if (r < 0)
 					{
 					if (!BIO_should_retry(c_ssl_bio))
@@ -1212,7 +1216,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 					i = sizeof sbuf;
 				else
 					i = (int)sw_num;
-				r = BIO_write(s_ssl_bio, sbuf, i);
+				r = BIO_write(s_ssl_bio, sbuf, i, 0, sa);
 				if (r < 0)
 					{
 					if (!BIO_should_retry(s_ssl_bio))
@@ -1301,7 +1305,7 @@ int doit_biopair(SSL *s_ssl, SSL *c_ssl, long count,
 					assert(r <= (int)num);
 					/* possibly r < num (non-contiguous data) */
 					num = r;
-					r = BIO_write(io2, dataptr, (int)num);
+					r = BIO_write(io2, dataptr, (int)num, 0, sa);
 					if (r != (int)num) /* can't happen */
 						{
 						fprintf(stderr, "ERROR: BIO_write could not write "
@@ -1518,7 +1522,7 @@ int doit(SSL *s_ssl, SSL *c_ssl, long count)
 				{
 				j = (cw_num > (long)sizeof(cbuf)) ?
 					(int)sizeof(cbuf) : (int)cw_num;
-				i=BIO_write(c_bio,cbuf,j);
+				i=BIO_write(c_bio,cbuf,j, 0, sa);
 				if (i < 0)
 					{
 					c_r=0;
@@ -1649,7 +1653,7 @@ int doit(SSL *s_ssl, SSL *c_ssl, long count)
 				{
 				j = (sw_num > (long)sizeof(sbuf)) ?
 					(int)sizeof(sbuf) : (int)sw_num;
-				i=BIO_write(s_bio,sbuf,j);
+				i=BIO_write(s_bio,sbuf,j, 0, sa);
 				if (i < 0)
 					{
 					s_r=0;

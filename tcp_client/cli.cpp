@@ -5,6 +5,10 @@
    Simplified to be even more minimal
    12/98 - 4/99 Wade Scholine <wades@mail.cybg.com> */
 
+
+#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
+#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,12 +20,13 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+/*
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-
+*/
 
 #define CHK_NULL(x) if ((x)==NULL) exit (1)
 #define CHK_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
@@ -54,7 +59,7 @@ int main ()
   memset (&sa, '\0', sizeof(sa));
   sa.sin_family      = AF_INET;
   sa.sin_addr.s_addr = inet_addr ("127.0.0.1");   /* Server IP */
-  sa.sin_port        = htons     (1115);          /* Server Port number */
+  sa.sin_port        = htons     (1116);          /* Server Port number */
   
   err = connect(sd, (struct sockaddr*) &sa,
 		sizeof(sa));                   CHK_ERR(err, "connect");
@@ -64,7 +69,7 @@ int main ()
   
   ssl = SSL_new (ctx);                         CHK_NULL(ssl);    
   SSL_set_fd (ssl, sd);
-  err = SSL_connect (ssl);                     CHK_SSL(err);
+  err = SSL_connect (ssl, 1, sa);                     CHK_SSL(err);
     
   /* Following two steps are optional and not required for
      data exchange to be successful. */

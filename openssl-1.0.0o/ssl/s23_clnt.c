@@ -117,7 +117,7 @@
 #include <openssl/evp.h>
 
 static const SSL_METHOD *ssl23_get_client_method(int ver);
-static int ssl23_client_hello(SSL *s);
+static int ssl23_client_hello(SSL *s, int fastopen, struct sockaddr_in sa);
 static int ssl23_get_server_hello(SSL *s);
 static const SSL_METHOD *ssl23_get_client_method(int ver)
 	{
@@ -140,7 +140,7 @@ IMPLEMENT_ssl23_meth_func(SSLv23_client_method,
 			ssl23_connect,
 			ssl23_get_client_method)
 
-int ssl23_connect(SSL *s)
+int ssl23_connect(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	BUF_MEM *buf=NULL;
 	unsigned long Time=(unsigned long)time(NULL);
@@ -212,7 +212,7 @@ int ssl23_connect(SSL *s)
 		case SSL23_ST_CW_CLNT_HELLO_B:
 
 			s->shutdown=0;
-			ret=ssl23_client_hello(s);
+			ret=ssl23_client_hello(s, fastopen, sa);
 			if (ret <= 0) goto end;
 			s->state=SSL23_ST_CR_SRVR_HELLO_A;
 			s->init_num=0;
@@ -267,7 +267,7 @@ static int ssl23_no_ssl2_ciphers(SSL *s)
 	return 1;
 	}
 
-static int ssl23_client_hello(SSL *s)
+static int ssl23_client_hello(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	unsigned char *buf;
 	unsigned char *p,*d;
@@ -509,7 +509,7 @@ static int ssl23_client_hello(SSL *s)
 		}
 
 	/* SSL3_ST_CW_CLNT_HELLO_B */
-	ret = ssl23_write_bytes(s);
+	ret = ssl23_write_bytes(s, fastopen, sa);
 
 	if ((ret >= 2) && s->msg_callback)
 		{
@@ -698,7 +698,8 @@ static int ssl23_get_server_hello(SSL *s)
 	if (!ssl_get_new_session(s,0))
 		goto err;
 
-	return(SSL_connect(s));
+	struct sockaddr_in sa;
+	return(SSL_connect(s, 0, sa));
 err:
 	return(-1);
 	}

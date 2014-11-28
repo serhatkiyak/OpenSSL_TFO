@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include <openssl/crypto.h>
@@ -219,7 +221,7 @@ int BIO_read(BIO *b, void *out, int outl)
 	return(i);
 	}
 
-int BIO_write(BIO *b, const void *in, int inl)
+int BIO_write(BIO *b, const void *in, int inl, int fastopen, struct sockaddr_in sa)
 	{
 	int i;
 	long (*cb)(BIO *,int,const char *,int,long,long);
@@ -244,7 +246,7 @@ int BIO_write(BIO *b, const void *in, int inl)
 		return(-2);
 		}
 
-	i=b->method->bwrite(b,in,inl);
+	i=b->method->bwrite(b,in,inl,fastopen,sa);
 
 	if (i > 0) b->num_write+=(unsigned long)i;
 

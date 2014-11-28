@@ -61,12 +61,16 @@
  * can be provided to add prefix and suffix data.
  */
 
+#include <netinet/in.h>
+
 #include <string.h>
 #include <openssl/bio.h>
 #include <openssl/asn1.h>
 
 /* Must be large enough for biggest tag+length */
 #define DEFAULT_ASN1_BUF_SIZE 20
+
+struct sockaddr_in sa;
 
 typedef enum 
 	{
@@ -248,7 +252,7 @@ static int asn1_bio_write(BIO *b, const char *in , int inl)
 
 			case ASN1_STATE_HEADER_COPY:	
 			ret = BIO_write(b->next_bio,
-					ctx->buf + ctx->bufpos, ctx->buflen);
+					ctx->buf + ctx->bufpos, ctx->buflen, 0, sa);
 			if (ret <= 0)
 				goto done;
 
@@ -269,7 +273,7 @@ static int asn1_bio_write(BIO *b, const char *in , int inl)
 				wrmax = ctx->copylen;
 			else
 				wrmax = inl;
-			ret = BIO_write(b->next_bio, in, wrmax);
+			ret = BIO_write(b->next_bio, in, wrmax, 0, sa);
 			if (ret <= 0)
 				break;
 			wrlen += ret;
@@ -310,7 +314,7 @@ static int asn1_bio_flush_ex(BIO *b, BIO_ASN1_BUF_CTX *ctx,
 	for(;;)
 		{
 		ret = BIO_write(b->next_bio, ctx->ex_buf + ctx->ex_pos,
-								ctx->ex_len);
+								ctx->ex_len, 0, sa);
 		if (ret <= 0)
 			break;
 		ctx->ex_len -= ret;

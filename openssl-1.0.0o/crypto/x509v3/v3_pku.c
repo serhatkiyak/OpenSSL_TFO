@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/asn1.h>
@@ -84,14 +86,15 @@ IMPLEMENT_ASN1_FUNCTIONS(PKEY_USAGE_PERIOD)
 static int i2r_PKEY_USAGE_PERIOD(X509V3_EXT_METHOD *method,
 	     PKEY_USAGE_PERIOD *usage, BIO *out, int indent)
 {
+	struct sockaddr_in sa;
 	BIO_printf(out, "%*s", indent, "");
 	if(usage->notBefore) {
-		BIO_write(out, "Not Before: ", 12);
+		BIO_write(out, "Not Before: ", 12, 0, sa);
 		ASN1_GENERALIZEDTIME_print(out, usage->notBefore);
-		if(usage->notAfter) BIO_write(out, ", ", 2);
+		if(usage->notAfter) BIO_write(out, ", ", 2, 0, sa);
 	}
 	if(usage->notAfter) {
-		BIO_write(out, "Not After: ", 11);
+		BIO_write(out, "Not After: ", 11, 0, sa);
 		ASN1_GENERALIZEDTIME_print(out, usage->notAfter);
 	}
 	return 1;

@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/buffer.h>
@@ -90,6 +92,7 @@ int X509_REQ_print_fp(FILE *fp, X509_REQ *x)
 
 int X509_REQ_print_ex(BIO *bp, X509_REQ *x, unsigned long nmflags, unsigned long cflag)
 	{
+	struct sockaddr_in sa;
 	unsigned long l;
 	int i;
 	const char *neg;
@@ -112,8 +115,8 @@ int X509_REQ_print_ex(BIO *bp, X509_REQ *x, unsigned long nmflags, unsigned long
 	ri=x->req_info;
 	if(!(cflag & X509_FLAG_NO_HEADER))
 		{
-		if (BIO_write(bp,"Certificate Request:\n",21) <= 0) goto err;
-		if (BIO_write(bp,"    Data:\n",10) <= 0) goto err;
+		if (BIO_write(bp,"Certificate Request:\n",21,0,sa) <= 0) goto err;
+		if (BIO_write(bp,"    Data:\n",10,0,sa) <= 0) goto err;
 		}
 	if(!(cflag & X509_FLAG_NO_VERSION))
 		{
@@ -129,11 +132,11 @@ int X509_REQ_print_ex(BIO *bp, X509_REQ *x, unsigned long nmflags, unsigned long
                 {
                 if (BIO_printf(bp,"        Subject:%c",mlch) <= 0) goto err;
                 if (X509_NAME_print_ex(bp,ri->subject,nmindent, nmflags) < 0) goto err;
-                if (BIO_write(bp,"\n",1) <= 0) goto err;
+                if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
                 }
 	if(!(cflag & X509_FLAG_NO_PUBKEY))
 		{
-		if (BIO_write(bp,"        Subject Public Key Info:\n",33) <= 0)
+		if (BIO_write(bp,"        Subject Public Key Info:\n",33,0,sa) <= 0)
 			goto err;
 		if (BIO_printf(bp,"%12sPublic Key Algorithm: ","") <= 0)
 			goto err;
@@ -201,13 +204,13 @@ get_next:
 					}
 				}
 				for (j=25-j; j>0; j--)
-					if (BIO_write(bp," ",1) != 1) goto err;
+					if (BIO_write(bp," ",1,0,sa) != 1) goto err;
 				if (BIO_puts(bp,":") <= 0) goto err;
 				if (	(type == V_ASN1_PRINTABLESTRING) ||
 					(type == V_ASN1_T61STRING) ||
 					(type == V_ASN1_IA5STRING))
 					{
-					if (BIO_write(bp,(char *)bs->data,bs->length)
+					if (BIO_write(bp,(char *)bs->data,bs->length,0,sa)
 						!= bs->length)
 						goto err;
 					BIO_puts(bp,"\n");
@@ -243,7 +246,7 @@ get_next:
 					BIO_printf(bp, "%16s", "");
 					M_ASN1_OCTET_STRING_print(bp,ex->value);
 					}
-				if (BIO_write(bp,"\n",1) <= 0) goto err;
+				if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
 				}
 			sk_X509_EXTENSION_pop_free(exts, X509_EXTENSION_free);
 			}

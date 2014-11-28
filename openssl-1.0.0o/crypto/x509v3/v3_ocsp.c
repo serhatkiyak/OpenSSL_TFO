@@ -58,6 +58,8 @@
 
 #ifndef OPENSSL_NO_OCSP
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/conf.h>
@@ -158,24 +160,25 @@ const X509V3_EXT_METHOD v3_ocsp_serviceloc = {
 static int i2r_ocsp_crlid(const X509V3_EXT_METHOD *method, void *in, BIO *bp,
 			  int ind)
 {
+	struct sockaddr_in sa;
 	OCSP_CRLID *a = in;
 	if (a->crlUrl)
 	        {
 		if (BIO_printf(bp, "%*scrlUrl: ", ind, "") <= 0) goto err;
 		if (!ASN1_STRING_print(bp, (ASN1_STRING*)a->crlUrl)) goto err;
-		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+		if (BIO_write(bp, "\n", 1, 0, sa) <= 0) goto err;
 		}
 	if (a->crlNum)
 	        {
 		if (BIO_printf(bp, "%*scrlNum: ", ind, "") <= 0) goto err;
 		if (i2a_ASN1_INTEGER(bp, a->crlNum) <= 0) goto err;
-		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+		if (BIO_write(bp, "\n", 1, 0, sa) <= 0) goto err;
 		}
 	if (a->crlTime)
 	        {
 		if (BIO_printf(bp, "%*scrlTime: ", ind, "") <= 0) goto err;
 		if (!ASN1_GENERALIZEDTIME_print(bp, a->crlTime)) goto err;
-		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+		if (BIO_write(bp, "\n", 1, 0, sa) <= 0) goto err;
 		}
 	return 1;
 	err:

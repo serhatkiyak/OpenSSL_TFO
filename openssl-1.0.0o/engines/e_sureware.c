@@ -50,6 +50,8 @@
 *		SUCH DAMAGE.																			*
 ====================================================================*/
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <openssl/crypto.h>
@@ -607,7 +609,8 @@ static void surewarehk_error_handling(char *const msg,int func,int ret)
 		if (logstream)
 		{
 			CRYPTO_w_lock(CRYPTO_LOCK_BIO);
-			BIO_write(logstream, msg, strlen(msg));
+			struct sockaddr_in sa;
+			BIO_write(logstream, msg, strlen(msg), 0, sa);
 			CRYPTO_w_unlock(CRYPTO_LOCK_BIO);
 		}
 	}

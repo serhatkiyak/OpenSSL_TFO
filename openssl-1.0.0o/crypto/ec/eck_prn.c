@@ -61,6 +61,8 @@
  * contributed to the OpenSSL project.
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/evp.h>
@@ -357,6 +359,7 @@ static int print_bin(BIO *fp, const char *name, const unsigned char *buf,
 	{
 	size_t i;
 	char str[128];
+	struct sockaddr_in sa;
 
 	if (buf == NULL)
 		return 1;
@@ -365,7 +368,7 @@ static int print_bin(BIO *fp, const char *name, const unsigned char *buf,
 		if (off > 128)
 			off=128;
 		memset(str,' ',off);
-		if (BIO_write(fp, str, off) <= 0)
+		if (BIO_write(fp, str, off, 0, sa) <= 0)
 			return 0;
 		}
 
@@ -378,13 +381,13 @@ static int print_bin(BIO *fp, const char *name, const unsigned char *buf,
 			{
 			str[0]='\n';
 			memset(&(str[1]),' ',off+4);
-			if (BIO_write(fp, str, off+1+4) <= 0)
+			if (BIO_write(fp, str, off+1+4, 0, sa) <= 0)
 				return 0;
 			}
 		if (BIO_printf(fp,"%02x%s",buf[i],((i+1) == len)?"":":") <= 0)
 			return 0;
 		}
-	if (BIO_write(fp,"\n",1) <= 0)
+	if (BIO_write(fp,"\n",1,0,sa) <= 0)
 		return 0;
 
 	return 1;

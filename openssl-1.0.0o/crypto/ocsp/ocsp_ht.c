@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -72,6 +74,8 @@
 /* Stateful OCSP request code, supporting non-blocking I/O */
 
 /* Opaque OCSP request status structure */
+
+struct sockaddr_in sa;
 
 struct ocsp_req_ctx_st {
 	int state;		/* Current I/O state */
@@ -141,12 +145,12 @@ int OCSP_REQ_CTX_add1_header(OCSP_REQ_CTX *rctx,
 		return 0;
 	if (value)
 		{
-		if (BIO_write(rctx->mem, ": ", 2) != 2)
+		if (BIO_write(rctx->mem, ": ", 2, 0, sa) != 2)
 			return 0;
 		if (BIO_puts(rctx->mem, value) <= 0)
 			return 0;
 		}
-	if (BIO_write(rctx->mem, "\r\n", 2) != 2)
+	if (BIO_write(rctx->mem, "\r\n", 2, 0, sa) != 2)
 		return 0;
 	return 1;
 	}
@@ -283,7 +287,7 @@ int OCSP_sendreq_nbio(OCSP_RESPONSE **presp, OCSP_REQ_CTX *rctx)
 
 		/* Write data to memory BIO */
 
-		if (BIO_write(rctx->mem, rctx->iobuf, n) != n)
+		if (BIO_write(rctx->mem, rctx->iobuf, n, 0, sa) != n)
 			return 0;
 		}
 
@@ -294,7 +298,7 @@ int OCSP_sendreq_nbio(OCSP_RESPONSE **presp, OCSP_REQ_CTX *rctx)
 		n = BIO_get_mem_data(rctx->mem, &p);
 
 		i = BIO_write(rctx->io,
-			p + (n - rctx->asn1_len), rctx->asn1_len);
+			p + (n - rctx->asn1_len), rctx->asn1_len, 0, sa);
 
 		if (i <= 0)
 			{

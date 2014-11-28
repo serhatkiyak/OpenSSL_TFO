@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -132,9 +134,10 @@ long MS_CALLBACK BIO_debug_callback(BIO *bio, int cmd, const char *argp,
 		break;
 		}
 
+	struct sockaddr_in sa;
 	b=(BIO *)bio->cb_arg;
 	if (b != NULL)
-		BIO_write(b,buf,strlen(buf));
+		BIO_write(b,buf,strlen(buf),0,sa);
 #if !defined(OPENSSL_NO_STDIO) && !defined(OPENSSL_SYS_WIN16)
 	else
 		fputs(buf,stderr);

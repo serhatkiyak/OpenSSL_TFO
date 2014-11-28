@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/objects.h>
@@ -182,6 +184,7 @@ static int TS_status_map_print(BIO *bio, struct status_map_st *a,
 
 int TS_TST_INFO_print_bio(BIO *bio, TS_TST_INFO *a)
 	{
+	struct sockaddr_in sa;
 	int v;
 	ASN1_OBJECT *policy_id;
 	const ASN1_INTEGER *serial;
@@ -211,13 +214,13 @@ int TS_TST_INFO_print_bio(BIO *bio, TS_TST_INFO *a)
 		BIO_printf(bio, "unspecified");
 	else
 		TS_ASN1_INTEGER_print_bio(bio, serial);
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	/* Print time stamp. */
 	BIO_printf(bio, "Time stamp: ");
 	gtime = TS_TST_INFO_get_time(a);
 	ASN1_GENERALIZEDTIME_print(bio, gtime);
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	/* Print accuracy. */
 	BIO_printf(bio, "Accuracy: ");
@@ -226,7 +229,7 @@ int TS_TST_INFO_print_bio(BIO *bio, TS_TST_INFO *a)
 		BIO_printf(bio, "unspecified");
 	else
 		TS_ACCURACY_print_bio(bio, accuracy);
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	/* Print ordering. */
 	BIO_printf(bio, "Ordering: %s\n", 
@@ -239,7 +242,7 @@ int TS_TST_INFO_print_bio(BIO *bio, TS_TST_INFO *a)
 		BIO_printf(bio, "unspecified");
 	else
 		TS_ASN1_INTEGER_print_bio(bio, nonce);
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	/* Print TSA name. */
 	BIO_printf(bio, "TSA: ");
@@ -253,7 +256,7 @@ int TS_TST_INFO_print_bio(BIO *bio, TS_TST_INFO *a)
 			X509V3_EXT_val_prn(bio, nval, 0, 0);
 		sk_CONF_VALUE_pop_free(nval, X509V3_conf_free);
 		}
-	BIO_write(bio, "\n", 1);
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	/* Print extensions. */
 	TS_ext_print_bio(bio, TS_TST_INFO_get_exts(a));

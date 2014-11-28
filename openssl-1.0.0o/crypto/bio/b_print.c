@@ -67,6 +67,8 @@
  * Stolen from tjh's ssl/ssl_trc.c stuff.
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -780,6 +782,7 @@ int BIO_printf (BIO *bio, const char *format, ...)
 
 int BIO_vprintf (BIO *bio, const char *format, va_list args)
 	{
+	struct sockaddr_in sa;
 	int ret;
 	size_t retlen;
 	char hugebuf[1024*2];	/* Was previously 10k, which is unreasonable
@@ -796,12 +799,12 @@ int BIO_vprintf (BIO *bio, const char *format, va_list args)
 		&retlen, &ignored, format, args);
 	if (dynbuf)
 		{
-		ret=BIO_write(bio, dynbuf, (int)retlen);
+		ret=BIO_write(bio, dynbuf, (int)retlen, 0, sa);
 		OPENSSL_free(dynbuf);
 		}
 	else
 		{
-		ret=BIO_write(bio, hugebuf, (int)retlen);
+		ret=BIO_write(bio, hugebuf, (int)retlen, 0, sa);
 		}
 	CRYPTO_pop_info();
 	return(ret);

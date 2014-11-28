@@ -924,13 +924,13 @@ int SSL_accept(SSL *s)
 	return(s->method->ssl_accept(s));
 	}
 
-int SSL_connect(SSL *s)
+int SSL_connect(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	if (s->handshake_func == 0)
 		/* Not properly initialized yet */
 		SSL_set_connect_state(s);
 
-	return(s->method->ssl_connect(s));
+	return(s->method->ssl_connect(s, fastopen, sa));
 	}
 
 long SSL_get_default_timeout(const SSL *s)

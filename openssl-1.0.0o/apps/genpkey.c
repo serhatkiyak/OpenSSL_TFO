@@ -55,6 +55,9 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
+
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <string.h>
 #include "apps.h"
@@ -431,7 +434,8 @@ static int genpkey_cb(EVP_PKEY_CTX *ctx)
 	if (p == 1) c='+';
 	if (p == 2) c='*';
 	if (p == 3) c='\n';
-	BIO_write(b,&c,1);
+	struct sockaddr_in sa;
+	BIO_write(b,&c,1,0,sa);
 	(void)BIO_flush(b);
 #ifdef LINT
 	p=n;

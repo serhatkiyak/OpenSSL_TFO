@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/buffer.h>
@@ -83,6 +85,7 @@ int ASN1_i2d_fp(i2d_of_void *i2d, FILE *out, void *x)
 
 int ASN1_i2d_bio(i2d_of_void *i2d, BIO *out, unsigned char *x)
 	{
+	struct sockaddr_in sa;
 	char *b;
 	unsigned char *p;
 	int i,j=0,n,ret=1;
@@ -100,7 +103,7 @@ int ASN1_i2d_bio(i2d_of_void *i2d, BIO *out, unsigned char *x)
 	
 	for (;;)
 		{
-		i=BIO_write(out,&(b[j]),n);
+		i=BIO_write(out,&(b[j]),n,0,sa);
 		if (i == n) break;
 		if (i <= 0)
 			{
@@ -136,6 +139,7 @@ int ASN1_item_i2d_fp(const ASN1_ITEM *it, FILE *out, void *x)
 
 int ASN1_item_i2d_bio(const ASN1_ITEM *it, BIO *out, void *x)
 	{
+	struct sockaddr_in sa;
 	unsigned char *b = NULL;
 	int i,j=0,n,ret=1;
 
@@ -148,7 +152,7 @@ int ASN1_item_i2d_bio(const ASN1_ITEM *it, BIO *out, void *x)
 
 	for (;;)
 		{
-		i=BIO_write(out,&(b[j]),n);
+		i=BIO_write(out,&(b[j]),n,0,sa);
 		if (i == n) break;
 		if (i <= 0)
 			{

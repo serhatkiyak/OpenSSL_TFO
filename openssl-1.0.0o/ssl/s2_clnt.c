@@ -121,7 +121,7 @@ static const SSL_METHOD *ssl2_get_client_method(int ver);
 static int get_server_finished(SSL *s);
 static int get_server_verify(SSL *s);
 static int get_server_hello(SSL *s);
-static int client_hello(SSL *s); 
+static int client_hello(SSL *s, int fastopen, struct sockaddr_in sa); 
 static int client_master_key(SSL *s);
 static int client_finished(SSL *s);
 static int client_certificate(SSL *s);
@@ -142,7 +142,7 @@ IMPLEMENT_ssl2_meth_func(SSLv2_client_method,
 			ssl2_connect,
 			ssl2_get_client_method)
 
-int ssl2_connect(SSL *s)
+int ssl2_connect(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	unsigned long l=(unsigned long)time(NULL);
 	BUF_MEM *buf=NULL;
@@ -205,7 +205,7 @@ int ssl2_connect(SSL *s)
 		case SSL2_ST_SEND_CLIENT_HELLO_A:
 		case SSL2_ST_SEND_CLIENT_HELLO_B:
 			s->shutdown=0;
-			ret=client_hello(s);
+			ret=client_hello(s, fastopen, sa);
 			if (ret <= 0) goto end;
 			s->init_num=0;
 			s->state=SSL2_ST_GET_SERVER_HELLO_A;
@@ -542,7 +542,7 @@ static int get_server_hello(SSL *s)
 	return(1);
 	}
 
-static int client_hello(SSL *s)
+static int client_hello(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	unsigned char *buf;
 	unsigned char *p,*d;

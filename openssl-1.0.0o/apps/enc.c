@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -103,6 +105,7 @@ int MAIN(int, char **);
 
 int MAIN(int argc, char **argv)
 	{
+	struct sockaddr_in sa;
 	static const char magic[]="Salted__";
 	char mbuf[sizeof magic-1];
 	char *strbuf=NULL;
@@ -530,10 +533,10 @@ bad:
 					/* If -P option then don't bother writing */
 					if((printkey != 2)
 					   && (BIO_write(wbio,magic,
-							 sizeof magic-1) != sizeof magic-1
+							 sizeof magic-1,0,sa) != sizeof magic-1
 					       || BIO_write(wbio,
 							    (char *)salt,
-							    sizeof salt) != sizeof salt)) {
+							    sizeof salt,0,sa) != sizeof salt)) {
 						BIO_printf(bio_err,"error writing output file\n");
 						goto end;
 					}
@@ -655,7 +658,7 @@ bad:
 		{
 		inl=BIO_read(rbio,(char *)buff,bsize);
 		if (inl <= 0) break;
-		if (BIO_write(wbio,(char *)buff,inl) != inl)
+		if (BIO_write(wbio,(char *)buff,inl,0,sa) != inl)
 			{
 			BIO_printf(bio_err,"error writing output file\n");
 			goto end;

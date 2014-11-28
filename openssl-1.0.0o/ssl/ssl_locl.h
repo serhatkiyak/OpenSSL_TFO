@@ -844,7 +844,7 @@ const SSL_CIPHER *ssl2_get_cipher(unsigned int u);
 int	ssl2_new(SSL *s);
 void	ssl2_free(SSL *s);
 int	ssl2_accept(SSL *s);
-int	ssl2_connect(SSL *s);
+int	ssl2_connect(SSL *s, int fastopen, struct sockaddr_in sa); 
 int	ssl2_read(SSL *s, void *buf, int len);
 int	ssl2_peek(SSL *s, void *buf, int len);
 int	ssl2_write(SSL *s, const void *buf, int len);
@@ -900,7 +900,7 @@ int	ssl3_digest_cached_records(SSL *s);
 int	ssl3_new(SSL *s);
 void	ssl3_free(SSL *s);
 int	ssl3_accept(SSL *s);
-int	ssl3_connect(SSL *s);
+int	ssl3_connect(SSL *s, int fastopen, struct sockaddr_in sa);
 int	ssl3_read(SSL *s, void *buf, int len);
 int	ssl3_peek(SSL *s, void *buf, int len);
 int	ssl3_write(SSL *s, const void *buf, int len);
@@ -966,7 +966,7 @@ int dtls1_send_newsession_ticket(SSL *s);
 unsigned int dtls1_min_mtu(void);
 
 /* some client-only functions */
-int ssl3_client_hello(SSL *s);
+int ssl3_client_hello(SSL *s, int fastopen, struct sockaddr_in sa);
 int ssl3_get_server_hello(SSL *s);
 int ssl3_get_certificate_request(SSL *s);
 int ssl3_get_new_session_ticket(SSL *s);
@@ -983,7 +983,7 @@ int ssl3_check_cert_and_algorithm(SSL *s);
 int ssl3_check_finished(SSL *s);
 #endif
 
-int dtls1_client_hello(SSL *s);
+int dtls1_client_hello(SSL *s, int fastopen, struct sockaddr_in sa);
 int dtls1_send_client_certificate(SSL *s);
 int dtls1_send_client_key_exchange(SSL *s);
 int dtls1_send_client_verify(SSL *s);
@@ -1010,9 +1010,9 @@ int dtls1_send_server_done(SSL *s);
 
 
 int ssl23_accept(SSL *s);
-int ssl23_connect(SSL *s);
+int ssl23_connect(SSL *s, int fastopen, struct sockaddr_in sa);
 int ssl23_read_bytes(SSL *s, int n);
-int ssl23_write_bytes(SSL *s);
+int ssl23_write_bytes(SSL *s, int fastopen, struct sockaddr_in sa);
 
 int tls1_new(SSL *s);
 void tls1_free(SSL *s);
@@ -1022,7 +1022,7 @@ long tls1_callback_ctrl(SSL *s,int cmd, void (*fp)(void));
 
 int dtls1_new(SSL *s);
 int	dtls1_accept(SSL *s);
-int	dtls1_connect(SSL *s);
+int	dtls1_connect(SSL *s, int fastopen, struct sockaddr_in sa);
 void dtls1_free(SSL *s);
 void dtls1_clear(SSL *s);
 long dtls1_ctrl(SSL *s,int cmd, long larg, void *parg);

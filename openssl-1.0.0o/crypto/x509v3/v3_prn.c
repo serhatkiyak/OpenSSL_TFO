@@ -57,6 +57,8 @@
  */
 /* X509 v3 extension utilities */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/conf.h>
@@ -164,6 +166,7 @@ int X509V3_EXT_print(BIO *out, X509_EXTENSION *ext, unsigned long flag, int inde
 
 int X509V3_extensions_print(BIO *bp, char *title, STACK_OF(X509_EXTENSION) *exts, unsigned long flag, int indent)
 {
+	struct sockaddr_in sa;
 	int i, j;
 
 	if(sk_X509_EXTENSION_num(exts) <= 0) return 1;
@@ -190,7 +193,7 @@ int X509V3_extensions_print(BIO *bp, char *title, STACK_OF(X509_EXTENSION) *exts
 			BIO_printf(bp, "%*s", indent + 4, "");
 			M_ASN1_OCTET_STRING_print(bp,ex->value);
 			}
-		if (BIO_write(bp,"\n",1) <= 0) return 0;
+		if (BIO_write(bp,"\n",1,0,sa) <= 0) return 0;
 		}
 	return 1;
 }

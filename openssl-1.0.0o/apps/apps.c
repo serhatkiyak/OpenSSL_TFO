@@ -115,6 +115,9 @@
 				   2 is to make sure no function defined
 				   in POSIX-2 is left undefined. */
 #endif
+
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -159,6 +162,8 @@ typedef struct {
 } NAME_EX_TBL;
 
 static UI_METHOD *ui_method = NULL;
+
+struct sockaddr_in sa;
 
 static int set_table_opts(unsigned long *flags, const char *arg, const NAME_EX_TBL *in_tbl);
 static int set_multi_opts(unsigned long *flags, const char *arg, const NAME_EX_TBL *in_tbl);
@@ -2403,7 +2408,7 @@ int bio_to_mem(unsigned char **out, int maxlen, BIO *in)
 		len = BIO_read(in, tbuf, len);
 		if (len <= 0)
 			break;
-		if (BIO_write(mem, tbuf, len) != len)
+		if (BIO_write(mem, tbuf, len, 0, sa) != len)
 			{
 			BIO_free(mem);
 			return -1;
@@ -2546,7 +2551,7 @@ static void jpake_send_step3a(BIO *bconn, JPAKE_CTX *ctx)
 
 	JPAKE_STEP3A_init(&s3a);
 	JPAKE_STEP3A_generate(&s3a, ctx);
-	BIO_write(bconn, s3a.hhk, sizeof s3a.hhk);
+	BIO_write(bconn, s3a.hhk, sizeof s3a.hhk, 0, sa);
 	(void)BIO_flush(bconn);
 	JPAKE_STEP3A_release(&s3a);
 	}
@@ -2557,7 +2562,7 @@ static void jpake_send_step3b(BIO *bconn, JPAKE_CTX *ctx)
 
 	JPAKE_STEP3B_init(&s3b);
 	JPAKE_STEP3B_generate(&s3b, ctx);
-	BIO_write(bconn, s3b.hk, sizeof s3b.hk);
+	BIO_write(bconn, s3b.hk, sizeof s3b.hk, 0, sa);
 	(void)BIO_flush(bconn);
 	JPAKE_STEP3B_release(&s3b);
 	}

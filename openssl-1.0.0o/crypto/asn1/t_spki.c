@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/x509.h>
@@ -72,6 +74,7 @@
 
 int NETSCAPE_SPKI_print(BIO *out, NETSCAPE_SPKI *spki)
 {
+	struct sockaddr_in sa;
 	EVP_PKEY *pkey;
 	ASN1_IA5STRING *chal;
 	int i, n;
@@ -98,10 +101,10 @@ int NETSCAPE_SPKI_print(BIO *out, NETSCAPE_SPKI *spki)
 	s=(char *)spki->signature->data;
 	for (i=0; i<n; i++)
 		{
-		if ((i%18) == 0) BIO_write(out,"\n      ",7);
+		if ((i%18) == 0) BIO_write(out,"\n      ",7,0,sa);
 		BIO_printf(out,"%02x%s",(unsigned char)s[i],
 						((i+1) == n)?"":":");
 		}
-	BIO_write(out,"\n",1);
+	BIO_write(out,"\n",1,0,sa);
 	return 1;
 }

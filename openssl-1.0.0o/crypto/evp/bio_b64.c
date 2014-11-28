@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include "cryptlib.h"
@@ -373,6 +375,7 @@ static int b64_read(BIO *b, char *out, int outl)
 
 static int b64_write(BIO *b, const char *in, int inl)
 	{
+	struct sockaddr_in sa;
 	int ret=0;
 	int n;
 	int i;
@@ -396,7 +399,7 @@ static int b64_write(BIO *b, const char *in, int inl)
 	n=ctx->buf_len-ctx->buf_off;
 	while (n > 0)
 		{
-		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
 		if (i <= 0)
 			{
 			BIO_copy_next_retry(b);
@@ -471,7 +474,7 @@ static int b64_write(BIO *b, const char *in, int inl)
 		n=ctx->buf_len;
 		while (n > 0)
 			{
-			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
 			if (i <= 0)
 				{
 				BIO_copy_next_retry(b);

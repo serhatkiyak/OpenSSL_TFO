@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <openssl/opensslconf.h>
 #ifndef OPENSSL_NO_RSA
 
@@ -301,12 +303,13 @@ int MAIN(int argc, char **argv)
 		goto end;
 	}
 	ret = 0;
+	struct sockaddr_in sa;
 	if(asn1parse) {
 		if(!ASN1_parse_dump(out, rsa_out, rsa_outlen, 1, -1)) {
 			ERR_print_errors(bio_err);
 		}
 	} else if(hexdump) BIO_dump(out, (char *)rsa_out, rsa_outlen);
-	else BIO_write(out, rsa_out, rsa_outlen);
+	else BIO_write(out, rsa_out, rsa_outlen, 0, sa);
 	end:
 	RSA_free(rsa);
 	BIO_free(in);

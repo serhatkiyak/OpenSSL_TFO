@@ -109,6 +109,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include "ssl_locl.h"
 #ifndef OPENSSL_NO_SSL2
 #include <stdio.h>
@@ -467,6 +469,7 @@ int ssl2_write(SSL *s, const void *_buf, int len)
 
 static int write_pending(SSL *s, const unsigned char *buf, unsigned int len)
 	{
+	struct sockaddr_in sa;
 	int i;
 
 	/* s->s2->wpend_len != 0 MUST be true. */
@@ -489,7 +492,7 @@ static int write_pending(SSL *s, const unsigned char *buf, unsigned int len)
 			s->rwstate=SSL_WRITING;
 			i=BIO_write(s->wbio,
 				(char *)&(s->s2->write_ptr[s->s2->wpend_off]),
-				(unsigned int)s->s2->wpend_len);
+				(unsigned int)s->s2->wpend_len, 0, sa);
 			}
 		else
 			{

@@ -144,7 +144,7 @@ IMPLEMENT_dtls1_meth_func(DTLSv1_client_method,
 			dtls1_connect,
 			dtls1_get_client_method)
 
-int dtls1_connect(SSL *s)
+int dtls1_connect(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	BUF_MEM *buf=NULL;
 	unsigned long Time=(unsigned long)time(NULL);
@@ -235,7 +235,7 @@ int dtls1_connect(SSL *s)
 			ssl3_init_finished_mac(s);
 
 			dtls1_start_timer(s);
-			ret=dtls1_client_hello(s);
+			ret=dtls1_client_hello(s, fastopen, sa);
 			if (ret <= 0) goto end;
 
 			if ( s->d1->send_cookie)
@@ -594,7 +594,7 @@ end:
 	return(ret);
 	}
 
-int dtls1_client_hello(SSL *s)
+int dtls1_client_hello(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	unsigned char *buf;
 	unsigned char *p,*d;

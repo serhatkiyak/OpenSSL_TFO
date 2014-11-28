@@ -109,6 +109,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <limits.h>
 #include <errno.h>
@@ -867,6 +869,7 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 		SSLerr(SSL_F_SSL3_WRITE_PENDING,SSL_R_BAD_WRITE_RETRY);
 		return(-1);
 		}
+	struct sockaddr_in sa;
 
 	for (;;)
 		{
@@ -876,7 +879,7 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 			s->rwstate=SSL_WRITING;
 			i=BIO_write(s->wbio,
 				(char *)&(wb->buf[wb->offset]),
-				(unsigned int)wb->left);
+				(unsigned int)wb->left, 0, sa);
 			}
 		else
 			{

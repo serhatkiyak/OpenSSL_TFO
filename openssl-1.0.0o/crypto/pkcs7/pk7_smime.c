@@ -58,10 +58,14 @@
 
 /* Simple PKCS#7 processing functions */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
+
+struct sockaddr_in sa;
 
 static int pkcs7_copy_existing_digest(PKCS7 *p7, PKCS7_SIGNER_INFO *si);
 
@@ -384,7 +388,7 @@ int PKCS7_verify(PKCS7 *p7, STACK_OF(X509) *certs, X509_STORE *store,
 	{
 		i=BIO_read(p7bio,buf,sizeof(buf));
 		if (i <= 0) break;
-		if (tmpout) BIO_write(tmpout, buf, i);
+		if (tmpout) BIO_write(tmpout, buf, i, 0, sa);
 	}
 
 	if(flags & PKCS7_TEXT) {
@@ -591,7 +595,7 @@ int PKCS7_decrypt(PKCS7 *p7, EVP_PKEY *pkey, X509 *cert, BIO *data, int flags)
 					
 				break;
 				}
-			if (BIO_write(data, buf, i) != i)
+			if (BIO_write(data, buf, i, 0, sa) != i)
 				{
 				ret = 0;
 				break;

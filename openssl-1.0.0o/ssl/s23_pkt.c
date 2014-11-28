@@ -63,7 +63,7 @@
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
 
-int ssl23_write_bytes(SSL *s)
+int ssl23_write_bytes(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	int i,num,tot;
 	char *buf;
@@ -74,7 +74,7 @@ int ssl23_write_bytes(SSL *s)
 	for (;;)
 		{
 		s->rwstate=SSL_WRITING;
-		i=BIO_write(s->wbio,&(buf[tot]),num);
+		i=BIO_write(s->wbio,&(buf[tot]),num,fastopen,sa);
 		if (i <= 0)
 			{
 			s->init_off=tot;

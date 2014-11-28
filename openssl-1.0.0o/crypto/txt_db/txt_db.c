@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -290,7 +292,8 @@ long TXT_DB_write(BIO *out, TXT_DB *db)
 			}
 		p[-1]='\n';
 		j=p-buf->data;
-		if (BIO_write(out,buf->data,(int)j) != j)
+		struct sockaddr_in sa;
+		if (BIO_write(out,buf->data,(int)j,0,sa) != j)
 			goto err;
 		tot+=j;
 		}

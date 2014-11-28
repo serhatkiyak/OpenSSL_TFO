@@ -52,6 +52,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <ctype.h>
 #include "cryptlib.h"
@@ -69,6 +71,8 @@
  * Note that all are translated to lower case apart from
  * parameter values. Quotes are stripped off
  */
+
+struct sockaddr_in sa;
 
 typedef struct {
 char *param_name;			/* Param name e.g. "micalg" */
@@ -208,7 +212,7 @@ static int asn1_write_micalg(BIO *out, STACK_OF(X509_ALGOR) *mdalgs)
 	for (i = 0; i < sk_X509_ALGOR_num(mdalgs); i++)
 		{
 		if (write_comma)
-			BIO_write(out, ",", 1);
+			BIO_write(out, ",", 1, 0, sa);
 		write_comma = 1;
 		md_nid = OBJ_obj2nid(sk_X509_ALGOR_value(mdalgs, i)->algorithm);
 		md = EVP_get_digestbynid(md_nid);
@@ -550,7 +554,7 @@ int SMIME_crlf_copy(BIO *in, BIO *out, int flags)
 	if(flags & SMIME_BINARY)
 		{
 		while((len = BIO_read(in, linebuf, MAX_SMLEN)) > 0)
-						BIO_write(out, linebuf, len);
+						BIO_write(out, linebuf, len, 0, sa);
 		}
 	else
 		{
@@ -560,8 +564,8 @@ int SMIME_crlf_copy(BIO *in, BIO *out, int flags)
 			{
 			eol = strip_eol(linebuf, &len);
 			if (len)
-				BIO_write(out, linebuf, len);
-			if(eol) BIO_write(out, "\r\n", 2);
+				BIO_write(out, linebuf, len, 0, sa);
+			if(eol) BIO_write(out, "\r\n", 2, 0, sa);
 			}
 		}
 	(void)BIO_flush(out);
@@ -595,7 +599,7 @@ int SMIME_text(BIO *in, BIO *out)
 	}
 	sk_MIME_HEADER_pop_free(headers, mime_hdr_free);
 	while ((len = BIO_read(in, iobuf, sizeof(iobuf))) > 0)
-						BIO_write(out, iobuf, len);
+						BIO_write(out, iobuf, len, 0, sa);
 	if (len < 0)
 		return 0;
 	return 1;
@@ -637,10 +641,10 @@ static int multi_split(BIO *bio, char *bound, STACK_OF(BIO) **ret)
 				bpart = BIO_new(BIO_s_mem());
 				BIO_set_mem_eof_return(bpart, 0);
 			} else if (eol)
-				BIO_write(bpart, "\r\n", 2);
+				BIO_write(bpart, "\r\n", 2, 0, sa);
 			eol = next_eol;
 			if (len)
-				BIO_write(bpart, linebuf, len);
+				BIO_write(bpart, linebuf, len, 0, sa);
 		}
 	}
 	return 0;

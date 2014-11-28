@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/lhash.h>
@@ -104,7 +106,8 @@ void ERR_print_errors_fp(FILE *fp)
 
 static int print_bio(const char *str, size_t len, void *bp)
 	{
-	return BIO_write((BIO *)bp, str, len);
+	struct sockaddr_in sa;
+	return BIO_write((BIO *)bp, str, len, 0, sa);
 	}
 void ERR_print_errors(BIO *bp)
 	{

@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/buffer.h>
@@ -65,6 +67,7 @@
 
 int i2a_ASN1_ENUMERATED(BIO *bp, ASN1_ENUMERATED *a)
 	{
+	struct sockaddr_in sa;
 	int i,n=0;
 	static const char *h="0123456789ABCDEF";
 	char buf[2];
@@ -73,7 +76,7 @@ int i2a_ASN1_ENUMERATED(BIO *bp, ASN1_ENUMERATED *a)
 
 	if (a->length == 0)
 		{
-		if (BIO_write(bp,"00",2) != 2) goto err;
+		if (BIO_write(bp,"00",2,0,sa) != 2) goto err;
 		n=2;
 		}
 	else
@@ -82,12 +85,12 @@ int i2a_ASN1_ENUMERATED(BIO *bp, ASN1_ENUMERATED *a)
 			{
 			if ((i != 0) && (i%35 == 0))
 				{
-				if (BIO_write(bp,"\\\n",2) != 2) goto err;
+				if (BIO_write(bp,"\\\n",2,0,sa) != 2) goto err;
 				n+=2;
 				}
 			buf[0]=h[((unsigned char)a->data[i]>>4)&0x0f];
 			buf[1]=h[((unsigned char)a->data[i]   )&0x0f];
-			if (BIO_write(bp,buf,2) != 2) goto err;
+			if (BIO_write(bp,buf,2,0,sa) != 2) goto err;
 			n+=2;
 			}
 		}

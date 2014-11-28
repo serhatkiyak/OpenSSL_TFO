@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include "cryptlib.h"
@@ -191,7 +193,8 @@ static int nbiof_write(BIO *b, const char *in, int inl)
 	else
 #endif
 		{
-		ret=BIO_write(b->next_bio,in,inl);
+		struct sockaddr_in sa;
+		ret=BIO_write(b->next_bio,in,inl,0,sa);
 		if (ret < 0)
 			{
 			BIO_copy_next_retry(b);

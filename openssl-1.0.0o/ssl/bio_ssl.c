@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -513,7 +515,8 @@ static int ssl_puts(BIO *bp, const char *str)
 	int n,ret;
 
 	n=strlen(str);
-	ret=BIO_write(bp,str,n);
+	struct sockaddr_in sa;
+	ret=BIO_write(bp,str,n,0,sa);
 	return(ret);
 	}
 

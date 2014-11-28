@@ -1,0 +1,457 @@
+apps/s_server.c:	ret=BIO_write(b->next_bio, wbuf->buff, inl);
+apps/s_server.c:					BIO_write(SSL_get_wbio(con),str,strlen(str));
+apps/s_server.c:				BIO_write(io," ",1);
+apps/s_server.c:						BIO_write(io,space,26-j);
+apps/s_server.c:						BIO_write(io,((i%3)?" ":"\n"),1);
+apps/s_server.c:						BIO_write(io,p,1);
+apps/s_server.c:					k=BIO_write(io,&(buf[j]),i-j);
+apps/asn1pars.c:		if(BIO_write(derout, str + offset, length) != (int)length) {
+Binary file apps/apps.o matches
+apps/dgst.c:	if(binout) BIO_write(out, buf, len);
+apps/apps.c:	if (BIO_write_filename(out,buf[0]) <= 0)
+apps/apps.c:	if (BIO_write_filename(out,buf[0]) <= 0)
+apps/apps.c:	if (BIO_write_filename(out,buf[1]) <= 0)
+apps/apps.c:		if (BIO_write(mem, tbuf, len) != len)
+apps/apps.c:	BIO_write(bconn, s3a.hhk, sizeof s3a.hhk);
+apps/apps.c:	BIO_write(bconn, s3b.hk, sizeof s3b.hk);
+apps/ca.c:			if (BIO_write_filename(Sout,outfile) <= 0)
+apps/ca.c:			if (BIO_write_filename(Cout,buf[2]) <= 0)
+Binary file apps/openssl matches
+Binary file apps/s_server.o matches
+Binary file apps/gendh.o matches
+apps/rsa.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/rsa.c:		BIO_write(out,(char *)pp,size);
+apps/crl2p7.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/enc.c:		if (BIO_write_filename(out,outf) <= 0)
+apps/enc.c:					   && (BIO_write(wbio,magic,
+apps/enc.c:					       || BIO_write(wbio,
+apps/enc.c:		if (BIO_write(wbio,(char *)buff,inl) != inl)
+apps/dsaparam.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/dsaparam.c:	BIO_write(cb->arg,&c,1);
+Binary file apps/req.o matches
+apps/crl.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/genrsa.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/genrsa.c:	BIO_write(cb->arg,&c,1);
+apps/pkcs7.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/gendsa.c:		if (BIO_write_filename(out,outfile) <= 0)
+Binary file apps/dsaparam.o matches
+apps/sess_id.c:			if (BIO_write_filename(out,outfile) <= 0)
+Binary file apps/dgst.o matches
+apps/pkeyutl.c:		BIO_write(out, buf_out, buf_outlen);
+apps/ec.c:		if (BIO_write_filename(out, outfile) <= 0)
+Binary file apps/asn1pars.o matches
+Binary file apps/rand.o matches
+apps/dsa.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/dh.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/req.c:			if (BIO_write_filename(out,keyout) <= 0)
+apps/req.c:			i=(int)BIO_write_filename(out,outfile);
+apps/req.c:	BIO_write(b,&c,1);
+Binary file apps/pkeyutl.o matches
+Binary file apps/genpkey.o matches
+Binary file apps/dhparam.o matches
+Binary file apps/rsautl.o matches
+apps/genpkey.c:	BIO_write(b,&c,1);
+apps/ecparam.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/x509.c:			if (BIO_write_filename(out,outfile) <= 0)
+apps/dhparam.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/dhparam.c:	BIO_write(cb->arg,&c,1);
+Binary file apps/genrsa.o matches
+Binary file apps/s_client.o matches
+Binary file apps/enc.o matches
+Binary file apps/rsa.o matches
+apps/rand.c:		r = BIO_write_filename(out, outfile);
+apps/rand.c:			BIO_write(out, buf, chunk);
+apps/gendh.c:		if (BIO_write_filename(out,outfile) <= 0)
+apps/gendh.c:	BIO_write(cb->arg,&c,1);
+apps/rsautl.c:	else BIO_write(out, rsa_out, rsa_outlen);
+apps/s_client.c:				BIO_write(bio,buf,strlen(buf));
+apps/s_client.c:				BIO_write(bio,"\n",1);
+apps/s_client.c:					BIO_write(bio,space,15-j%25);
+apps/s_client.c:					BIO_write(bio,((i%3)?" ":"\n"),1);
+apps/s_client.c:					BIO_write(bio,p,1);
+apps/s_client.c:			BIO_write(bio,"\n",1);
+CHANGES:     BIO_write(b, ...).
+CHANGES:     In BIO_puts, increment b->num_write as in BIO_write.
+crypto/txt_db/txt_db.c:		if (BIO_write(out,buf->data,(int)j) != j)
+Binary file crypto/txt_db/txt_db.o matches
+crypto/ecdh/ecdhtest.c:	BIO_write((BIO *)arg,&c,1);
+Binary file crypto/bio/bio_cb.o matches
+crypto/bio/bss_acpt.c~:	ret=BIO_write(b->next_bio,in,inl);
+crypto/bio/bio_err.c:{ERR_FUNC(BIO_F_BIO_WRITE),	"BIO_write"},
+crypto/bio/bf_nbio.c:		ret=BIO_write(b->next_bio,in,inl,0,sa);
+crypto/bio/bss_acpt.c:	ret=BIO_write(b->next_bio,in,inl,0,sa);
+Binary file crypto/bio/bf_null.o matches
+crypto/bio/bio_cb.c:		BIO_write(b,buf,strlen(buf),0,sa);
+crypto/bio/bf_nbio.c~:		ret=BIO_write(b->next_bio,in,inl,0,sa);
+Binary file crypto/bio/b_dump.o matches
+crypto/bio/b_print.c~:		ret=BIO_write(bio, dynbuf, (int)retlen);
+crypto/bio/b_print.c~:		ret=BIO_write(bio, hugebuf, (int)retlen);
+crypto/bio/bf_null.c~:	ret=BIO_write(b->next_bio,in,inl,0,sa);
+Binary file crypto/bio/bf_nbio.o matches
+crypto/bio/b_print.c:		ret=BIO_write(bio, dynbuf, (int)retlen, 0, sa);
+crypto/bio/b_print.c:		ret=BIO_write(bio, hugebuf, (int)retlen, 0, sa);
+crypto/bio/bio.h:#define BIO_write_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+crypto/bio/bio.h:int	BIO_write(BIO *b, const void *data, int len, int fastopen, struct sockaddr_in sa);
+crypto/bio/bf_null.c:	ret=BIO_write(b->next_bio,in,inl,0,sa);
+crypto/bio/bio_lib.c~:int BIO_write(BIO *b, const void *in, int inl, int fastopen, struct sockaddr_in sa)
+crypto/bio/bio_cb.c~:		BIO_write(b,buf,strlen(buf),0,sa);
+Binary file crypto/bio/bio_err.o matches
+Binary file crypto/bio/bf_buff.o matches
+crypto/bio/b_dump.c:	return BIO_write((BIO *)bp, (const char *)data, len, 0, sa);
+crypto/bio/bio_lib.c:int BIO_write(BIO *b, const void *in, int inl, int fastopen, struct sockaddr_in sa)
+crypto/bio/b_dump.c~:	return BIO_write((BIO *)bp, (const char *)data, len);
+crypto/bio/bf_buff.c:			i=BIO_write(b->next_bio,&(ctx->obuf[ctx->obuf_off]),
+crypto/bio/bf_buff.c:		i=BIO_write(b->next_bio,in,inl,0,sa);
+crypto/bio/bf_buff.c:				r=BIO_write(b->next_bio,
+crypto/bio/bio.h~:#define BIO_write_filename(b,name) BIO_ctrl(b,BIO_C_SET_FILENAME, \
+crypto/bio/bio.h~:int	BIO_write(BIO *b, const void *data, int len);
+crypto/bio/bf_buff.c~:			i=BIO_write(b->next_bio,&(ctx->obuf[ctx->obuf_off],0,sa),
+crypto/bio/bf_buff.c~:		i=BIO_write(b->next_bio,in,inl,0,sa);
+crypto/bio/bf_buff.c~:				r=BIO_write(b->next_bio,
+Binary file crypto/bio/bss_acpt.o matches
+Binary file crypto/bio/b_print.o matches
+Binary file crypto/bio/bio_lib.o matches
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, "<*<", 3);
+crypto/bio/bf_lbuf.c:			i=BIO_write(b->next_bio,
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, ">*>", 3);
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, ">*>", 3);
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, "<*<", 3);
+crypto/bio/bf_lbuf.c:			i=BIO_write(b->next_bio,in,p - in);
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, ">*>", 3);
+crypto/bio/bf_lbuf.c:BIO_write(b->next_bio, ">*>", 3);
+crypto/bio/bf_lbuf.c:				r=BIO_write(b->next_bio,
+crypto/dsa/dsatest.c:	BIO_write(arg->arg,&c,1);
+crypto/dh/dhtest.c:	BIO_write(arg->arg,&c,1);
+crypto/comp/c_zlib.c:			ret = BIO_write(b->next_bio, ctx->optr, ctx->ocount);
+crypto/comp/c_zlib.c:			ret = BIO_write(b->next_bio, ctx->optr, ctx->ocount);
+Binary file crypto/x509v3/v3_prn.o matches
+Binary file crypto/x509v3/v3_pku.o matches
+crypto/x509v3/v3_prn.c:		if (BIO_write(bp,"\n",1) <= 0) return 0;
+crypto/x509v3/v3_pku.c:		BIO_write(out, "Not Before: ", 12);
+crypto/x509v3/v3_pku.c:		if(usage->notAfter) BIO_write(out, ", ", 2);
+crypto/x509v3/v3_pku.c:		BIO_write(out, "Not After: ", 11);
+crypto/x509v3/v3_ocsp.c:		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+crypto/x509v3/v3_ocsp.c:		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+crypto/x509v3/v3_ocsp.c:		if (BIO_write(bp, "\n", 1) <= 0) goto err;
+Binary file crypto/x509v3/v3_ocsp.o matches
+crypto/pem/pem_lib.c:	if (	(BIO_write(bp,"-----BEGIN ",11) != 11) ||
+crypto/pem/pem_lib.c:		(BIO_write(bp,name,nlen) != nlen) ||
+crypto/pem/pem_lib.c:		(BIO_write(bp,"-----\n",6) != 6))
+crypto/pem/pem_lib.c:		if (	(BIO_write(bp,header,i) != i) ||
+crypto/pem/pem_lib.c:			(BIO_write(bp,"\n",1) != 1))
+crypto/pem/pem_lib.c:		if ((outl) && (BIO_write(bp,(char *)buf,outl) != outl))
+crypto/pem/pem_lib.c:	if ((outl > 0) && (BIO_write(bp,(char *)buf,outl) != outl)) goto err;
+crypto/pem/pem_lib.c:	if (	(BIO_write(bp,"-----END ",9) != 9) ||
+crypto/pem/pem_lib.c:		(BIO_write(bp,name,nlen) != nlen) ||
+crypto/pem/pem_lib.c:		(BIO_write(bp,"-----\n",6) != 6))
+crypto/pem/pvkfmt.c:	wrlen = BIO_write(out, tmp, outlen);
+crypto/pem/pvkfmt.c:	wrlen = BIO_write(out, tmp, outlen);
+Binary file crypto/pem/pem_lib.o matches
+Binary file crypto/pem/pvkfmt.o matches
+crypto/ocsp/ocsp_prn.c:	if (BIO_write(bp,"OCSP Request Data:\n",19) <= 0) goto err;
+crypto/ocsp/ocsp_prn.c:		if (BIO_write(bp,"\n    Requestor Name: ",21) <= 0) 
+crypto/ocsp/ocsp_prn.c:	if (BIO_write(bp,"\n    Requestor List:\n",21) <= 0) goto err;
+crypto/ocsp/ocsp_prn.c:		if (BIO_write(bp,"\n",1) <= 0) goto err;
+crypto/ocsp/ocsp_prn.c:		if (BIO_write(bp,"\n",1) <= 0) goto err;
+Binary file crypto/ocsp/ocsp_prn.o matches
+crypto/ocsp/ocsp_ht.c:		if (BIO_write(rctx->mem, ": ", 2) != 2)
+crypto/ocsp/ocsp_ht.c:	if (BIO_write(rctx->mem, "\r\n", 2) != 2)
+crypto/ocsp/ocsp_ht.c:		if (BIO_write(rctx->mem, rctx->iobuf, n) != n)
+crypto/ocsp/ocsp_ht.c:		i = BIO_write(rctx->io,
+Binary file crypto/ocsp/ocsp_ht.o matches
+Binary file crypto/ec/eck_prn.o matches
+crypto/ec/eck_prn.c~:		if (BIO_write(fp, str, off, 0, sa) <= 0)
+crypto/ec/eck_prn.c~:			if (BIO_write(fp, str, off+1+4, 0, sa) <= 0)
+crypto/ec/eck_prn.c~:	if (BIO_write(fp,"\n",1,0,sa) <= 0)
+crypto/ec/eck_prn.c:		if (BIO_write(fp, str, off, 0, sa) <= 0)
+crypto/ec/eck_prn.c:			if (BIO_write(fp, str, off+1+4, 0, sa) <= 0)
+crypto/ec/eck_prn.c:	if (BIO_write(fp,"\n",1,0,sa) <= 0)
+Binary file crypto/evp/bio_ok.o matches
+crypto/evp/bio_b64.c~:		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_b64.c~:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_md.c:		ret=BIO_write(b->next_bio,in,inl,0,sa);
+Binary file crypto/evp/bio_b64.o matches
+crypto/evp/bio_ok.c~:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+crypto/evp/bio_b64.c:		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_b64.c:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_enc.c~:		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+crypto/evp/bio_enc.c~:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+crypto/evp/bio_md.c~:		ret=BIO_write(b->next_bio,in,inl,0,sa);
+Binary file crypto/evp/bio_enc.o matches
+crypto/evp/bio_enc.c:		i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_enc.c:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+crypto/evp/bio_ok.c:			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
+Binary file crypto/evp/bio_md.o matches
+crypto/pkcs7/pk7_smime.c:		if (tmpout) BIO_write(tmpout, buf, i);
+crypto/pkcs7/pk7_smime.c:			if (BIO_write(data, buf, i) != i)
+crypto/pkcs7/pk7_doit.c:			BIO_write(bio,(char *)data_body->data,data_body->length);
+Binary file crypto/pkcs7/pk7_smime.o matches
+crypto/threads/mttest.c:				i=BIO_write(c_bio,"hello from client\n",18);
+crypto/threads/mttest.c:				i=BIO_write(s_bio,"hello from server\n",18);
+Binary file crypto/cms/cms_smime.o matches
+crypto/cms/cms_smime.c:		if (tmpout && (BIO_write(tmpout, buf, i) != i))
+crypto/asn1/f_int.c:		if (BIO_write(bp, "-", 1, 0, sa) != 1) goto err;
+crypto/asn1/f_int.c:		if (BIO_write(bp,"00",2, 0, sa) != 2) goto err;
+crypto/asn1/f_int.c:				if (BIO_write(bp,"\\\n",2,0,sa) != 2) goto err;
+crypto/asn1/f_int.c:			if (BIO_write(bp,buf,2,0,sa) != 2) goto err;
+Binary file crypto/asn1/f_string.o matches
+crypto/asn1/asn_mime.c:			BIO_write(out, ",", 1);
+crypto/asn1/asn_mime.c:						BIO_write(out, linebuf, len);
+crypto/asn1/asn_mime.c:				BIO_write(out, linebuf, len);
+crypto/asn1/asn_mime.c:			if(eol) BIO_write(out, "\r\n", 2);
+crypto/asn1/asn_mime.c:						BIO_write(out, iobuf, len);
+crypto/asn1/asn_mime.c:				BIO_write(bpart, "\r\n", 2);
+crypto/asn1/asn_mime.c:				BIO_write(bpart, linebuf, len);
+Binary file crypto/asn1/t_x509a.o matches
+crypto/asn1/f_enum.c:		if (BIO_write(bp,"00",2) != 2) goto err;
+crypto/asn1/f_enum.c:				if (BIO_write(bp,"\\\n",2) != 2) goto err;
+crypto/asn1/f_enum.c:			if (BIO_write(bp,buf,2) != 2) goto err;
+Binary file crypto/asn1/t_spki.o matches
+crypto/asn1/t_req.c~:		if (BIO_write(bp,"Certificate Request:\n",21) <= 0) goto err;
+crypto/asn1/t_req.c~:		if (BIO_write(bp,"    Data:\n",10) <= 0) goto err;
+crypto/asn1/t_req.c~:                if (BIO_write(bp,"\n",1) <= 0) goto err;
+crypto/asn1/t_req.c~:		if (BIO_write(bp,"        Subject Public Key Info:\n",33) <= 0)
+crypto/asn1/t_req.c~:					if (BIO_write(bp," ",1) != 1) goto err;
+crypto/asn1/t_req.c~:					if (BIO_write(bp,(char *)bs->data,bs->length)
+crypto/asn1/t_req.c~:				if (BIO_write(bp,"\n",1) <= 0) goto err;
+Binary file crypto/asn1/t_pkey.o matches
+crypto/asn1/t_spki.c~:		if ((i%18) == 0) BIO_write(out,"\n      ",7);
+crypto/asn1/t_spki.c~:	BIO_write(out,"\n",1);
+Binary file crypto/asn1/a_strex.o matches
+crypto/asn1/a_object.c:		return(BIO_write(bp,"NULL",4,0,sa));
+crypto/asn1/a_object.c:		return BIO_write(bp, "<INVALID>", 9, 0, sa);
+crypto/asn1/a_object.c:	BIO_write(bp,p,i,0,sa);
+Binary file crypto/asn1/asn_mime.o matches
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"Certificate:\n",13,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"    Data:\n",10,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"        Serial Number:",22,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"        Validity\n",17,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"            Not Before: ",24,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"\n            Not After : ",25,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
+crypto/asn1/t_x509.c:		if (BIO_write(bp,"        Subject Public Key Info:\n",33,0,sa) <= 0)
+crypto/asn1/t_x509.c:			if (BIO_write(bp,"\n        ",9,0,sa) <= 0) return 0;
+crypto/asn1/t_x509.c:	if (BIO_write(bp,"\n",1,0,sa) != 1) return 0;
+crypto/asn1/t_x509.c:			if (BIO_write(bp,buf,n,0,sa) <= 0)
+crypto/asn1/t_x509.c:		if (BIO_write(bp,buf,n,0,sa) <= 0)
+crypto/asn1/t_x509.c:	BIO_write(bp,"Bad time value",14,0,sa);
+crypto/asn1/t_x509.c:	BIO_write(bp,"Bad time value",14,0,sa);
+crypto/asn1/t_x509.c:	BIO_write(bp,"Bad time value",14,0,sa);
+crypto/asn1/t_x509.c:			if (BIO_write(bp,c,i,0,sa) != i) goto err;
+crypto/asn1/t_x509.c:				if (BIO_write(bp,", ",2,0,sa) != 2) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"Certificate:\n",13) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"    Data:\n",10) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"        Serial Number:",22) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"\n",1) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"        Validity\n",17) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"            Not Before: ",24) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"\n            Not After : ",25) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"\n",1) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"\n",1) <= 0) goto err;
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,"        Subject Public Key Info:\n",33) <= 0)
+crypto/asn1/t_x509.c~:			if (BIO_write(bp,"\n        ",9) <= 0) return 0;
+crypto/asn1/t_x509.c~:	if (BIO_write(bp,"\n",1) != 1) return 0;
+crypto/asn1/t_x509.c~:			if (BIO_write(bp,buf,n) <= 0)
+crypto/asn1/t_x509.c~:		if (BIO_write(bp,buf,n) <= 0)
+crypto/asn1/t_x509.c~:	BIO_write(bp,"Bad time value",14);
+crypto/asn1/t_x509.c~:	BIO_write(bp,"Bad time value",14);
+crypto/asn1/t_x509.c~:	BIO_write(bp,"Bad time value",14);
+crypto/asn1/t_x509.c~:			if (BIO_write(bp,c,i) != i) goto err;
+crypto/asn1/t_x509.c~:				if (BIO_write(bp,", ",2) != 2) goto err;
+Binary file crypto/asn1/a_i2d_fp.o matches
+crypto/asn1/f_int.c~:		if (BIO_write(bp, "-", 1) != 1) goto err;
+crypto/asn1/f_int.c~:		if (BIO_write(bp,"00",2) != 2) goto err;
+crypto/asn1/f_int.c~:				if (BIO_write(bp,"\\\n",2) != 2) goto err;
+crypto/asn1/f_int.c~:			if (BIO_write(bp,buf,2) != 2) goto err;
+Binary file crypto/asn1/bio_asn1.o matches
+crypto/asn1/a_strex.c:	if(BIO_write(arg, buf, len, 0, sa) != len) return 0;
+crypto/asn1/t_spki.c:		if ((i%18) == 0) BIO_write(out,"\n      ",7,0,sa);
+crypto/asn1/t_spki.c:	BIO_write(out,"\n",1,0,sa);
+Binary file crypto/asn1/f_enum.o matches
+crypto/asn1/t_x509a.c:		BIO_write(out,"\n",1,0,sa);
+crypto/asn1/tasn_prn.c~:		if (BIO_write(out, spaces, nspaces, 0, sa) != nspaces)
+crypto/asn1/tasn_prn.c~:	if (BIO_write(out, spaces, indent, 0, sa) != indent)
+crypto/asn1/tasn_prn.c~:	if (BIO_write(out, ": ", 2, 0, sa) != 2)
+crypto/asn1/t_x509a.c~:		BIO_write(out,"\n",1);
+Binary file crypto/asn1/t_x509.o matches
+Binary file crypto/asn1/asn1_par.o matches
+crypto/asn1/a_strex.c~:	if(BIO_write(arg, buf, len) != len) return 0;
+crypto/asn1/bio_asn1.c:			ret = BIO_write(b->next_bio,
+crypto/asn1/bio_asn1.c:			ret = BIO_write(b->next_bio, in, wrmax);
+crypto/asn1/bio_asn1.c:		ret = BIO_write(b->next_bio, ctx->ex_buf + ctx->ex_pos,
+Binary file crypto/asn1/tasn_prn.o matches
+crypto/asn1/tasn_prn.c:		if (BIO_write(out, spaces, nspaces, 0, sa) != nspaces)
+crypto/asn1/tasn_prn.c:	if (BIO_write(out, spaces, indent, 0, sa) != indent)
+crypto/asn1/tasn_prn.c:	if (BIO_write(out, ": ", 2, 0, sa) != 2)
+Binary file crypto/asn1/f_int.o matches
+Binary file crypto/asn1/a_object.o matches
+crypto/asn1/asn1_par.c:	if (BIO_write(bp,p,6) < 6) goto err;
+crypto/asn1/asn1_par.c:			if (BIO_write(bp,"Error in encoding\n",18) <= 0)
+crypto/asn1/asn1_par.c:			if (BIO_write(bp,"\n",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:			if (BIO_write(bp,"\n",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:				if (BIO_write(bp,":",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:					BIO_write(bp,(const char *)p,(int)len)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,":",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,":BAD OBJECT",11) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,"Bad boolean\n",12) <= 0)
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,":",1) <= 0)
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,(const char *)opp,
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,"[HEX DUMP]:",11) <= 0)
+crypto/asn1/asn1_par.c:							if (BIO_write(bp,"\n",1) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,":",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,"-",1) <= 0)
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,"00",2) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,"BAD INTEGER",11) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,":",1) <= 0) goto end;
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,"-",1) <= 0)
+crypto/asn1/asn1_par.c:						if (BIO_write(bp,"00",2) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,"BAD ENUMERATED",11) <= 0)
+crypto/asn1/asn1_par.c:					if (BIO_write(bp,"\n",1) <= 0)
+crypto/asn1/asn1_par.c:				if (BIO_write(bp,"\n",1) <= 0) goto end;
+crypto/asn1/f_string.c:		if (BIO_write(bp,"0",1) != 1) goto err;
+crypto/asn1/f_string.c:				if (BIO_write(bp,"\\\n",2) != 2) goto err;
+crypto/asn1/f_string.c:			if (BIO_write(bp,buf,2) != 2) goto err;
+crypto/asn1/t_req.c:		if (BIO_write(bp,"Certificate Request:\n",21,0,sa) <= 0) goto err;
+crypto/asn1/t_req.c:		if (BIO_write(bp,"    Data:\n",10,0,sa) <= 0) goto err;
+crypto/asn1/t_req.c:                if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
+crypto/asn1/t_req.c:		if (BIO_write(bp,"        Subject Public Key Info:\n",33,0,sa) <= 0)
+crypto/asn1/t_req.c:					if (BIO_write(bp," ",1,0,sa) != 1) goto err;
+crypto/asn1/t_req.c:					if (BIO_write(bp,(char *)bs->data,bs->length,0,sa)
+crypto/asn1/t_req.c:				if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
+crypto/asn1/t_pkey.c~:		if (BIO_write(bp,"\n",1) <= 0) return(0);
+crypto/asn1/t_pkey.c:		if (BIO_write(bp,"\n",1,0,sa) <= 0) return(0);
+Binary file crypto/asn1/t_req.o matches
+crypto/asn1/a_i2d_fp.c:		i=BIO_write(out,&(b[j]),n,0,sa);
+crypto/asn1/a_i2d_fp.c:		i=BIO_write(out,&(b[j]),n,0,sa);
+crypto/asn1/a_object.c~:		return(BIO_write(bp,"NULL",4));
+crypto/asn1/a_object.c~:		return BIO_write(bp, "<INVALID>", 9);
+crypto/asn1/a_object.c~:	BIO_write(bp,p,i);
+crypto/asn1/a_i2d_fp.c~:		i=BIO_write(out,&(b[j]),n);
+crypto/asn1/a_i2d_fp.c~:		i=BIO_write(out,&(b[j]),n);
+crypto/bn/bntest.c:		if (!BIO_write_filename(out,outfile))
+Binary file crypto/bn/bn_print.o matches
+crypto/bn/bn_print.c~:	if ((a->neg) && (BIO_write(bp,"-",1,0,sa) != 1)) goto end;
+crypto/bn/bn_print.c~:	if (BN_is_zero(a) && (BIO_write(bp,"0",1,0,sa) != 1)) goto end;
+crypto/bn/bn_print.c~:				if (BIO_write(bp,&(Hex[v]),1,0,sa) != 1)
+crypto/bn/bn_print.c:	if ((a->neg) && (BIO_write(bp,"-",1,0,sa) != 1)) goto end;
+crypto/bn/bn_print.c:	if (BN_is_zero(a) && (BIO_write(bp,"0",1,0,sa) != 1)) goto end;
+crypto/bn/bn_print.c:				if (BIO_write(bp,&(Hex[v]),1,0,sa) != 1)
+crypto/ts/ts_req_print.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_lib.c:		result = BIO_write(bio, "0x", 2) > 0;
+crypto/ts/ts_lib.c:		result = result && BIO_write(bio, hex, strlen(hex)) > 0;
+crypto/ts/ts_lib.c:	BIO_write(bio, obj_txt, len);
+crypto/ts/ts_lib.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_lib.c:		BIO_write(bio, "\n", 1);
+Binary file crypto/ts/ts_req_print.o matches
+crypto/ts/ts_rsp_print.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_rsp_print.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_rsp_print.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_rsp_print.c:	BIO_write(bio, "\n", 1);
+crypto/ts/ts_rsp_print.c:	BIO_write(bio, "\n", 1);
+Binary file crypto/ts/ts_rsp_print.o matches
+Binary file crypto/ts/ts_lib.o matches
+Binary file crypto/err/err_prn.o matches
+crypto/err/err_prn.c~:	return BIO_write((BIO *)bp, str, len, 0, sa);
+crypto/err/err_prn.c:	return BIO_write((BIO *)bp, str, len, 0, sa);
+demos/tunala/buffer.c:	ret = BIO_write(bio, buf->data, buf->used);
+demos/bio/sconnect.c:		i=BIO_write(out,&(p[off]),len);
+demos/state_machine/state_machine.c:    int n=BIO_write(pMachine->pbioRead,aucBuf,nBuf);
+demos/b64.c:		if (BIO_write_filename(out,outf) <= 0)
+demos/b64.c:		if (BIO_write(wbio,(char *)buff,inl) != inl)
+doc/crypto/BIO_ctrl.pod:that the call should be retried later in a similar manner to BIO_write(). 
+doc/crypto/BIO_s_file.pod:BIO_read_filename, BIO_write_filename, BIO_append_filename,
+doc/crypto/BIO_s_file.pod: int BIO_write_filename(BIO *b, char *name)
+doc/crypto/BIO_s_file.pod:Calls to BIO_read() and BIO_write() read and write data to the
+doc/crypto/BIO_s_file.pod:BIO_read_filename(), BIO_write_filename(), BIO_append_filename() and
+doc/crypto/BIO_s_file.pod: if(!BIO_write_filename(out, "filename.txt")) /* Error ... */
+doc/crypto/BIO_s_file.pod:BIO_read_filename(), BIO_write_filename(),  BIO_append_filename() and
+doc/crypto/BIO_s_file.pod:L<BIO_write(3)|BIO_write(3)>, L<BIO_puts(3)|BIO_puts(3)>,
+doc/crypto/BIO_read.pod:BIO_read, BIO_write, BIO_gets, BIO_puts - BIO I/O functions
+doc/crypto/BIO_read.pod: int	BIO_write(BIO *b, const void *buf, int len);
+doc/crypto/BIO_read.pod:BIO_write() attempts to write B<len> bytes from B<buf> to BIO B<b>.
+doc/crypto/EVP_PKEY_keygen.pod:	BIO_write(b,&c,1);
+doc/crypto/BIO_set_callback.pod:=item B<BIO_write(b, in, inl)>
+doc/crypto/BIO_should_retry.pod:They will typically be called after a failed BIO_read() or BIO_write()
+doc/crypto/BIO_s_fd.pod:BIO_read() and BIO_write() read or write the underlying descriptor.
+doc/crypto/BIO_s_fd.pod:The behaviour of BIO_read() and BIO_write() depends on the behavior of the
+doc/crypto/BIO_s_fd.pod:L<BIO_write(3)|BIO_write(3)>, L<BIO_puts(3)|BIO_puts(3)>,
+doc/crypto/BIO_s_bio.pod:Calls to BIO_write() will place data in the buffer or request a retry if the
+doc/crypto/BIO_s_bio.pod:value will return a value from BIO_write() less than the amount requested or if the
+doc/crypto/BIO_s_bio.pod:BIO_write() and a response read with BIO_read(), this can occur during an
+doc/crypto/BIO_s_bio.pod:TLS/SSL handshake for example. BIO_write() will succeed and place data in the write
+doc/crypto/BIO_f_md.pod:BIO_write() is digested.
+doc/crypto/BIO_f_md.pod: BIO_write(bio, message, strlen(message));
+doc/crypto/BIO_f_ssl.pod:	BIO_write(out, tmpbuf, len);
+doc/crypto/BIO_f_ssl.pod:	BIO_write(sbio, tmpbuf, len);
+doc/crypto/BIO_f_ssl.pod:	BIO_write(out, tmpbuf, len);
+doc/crypto/BIO_s_connect.pod:	BIO_write(out, tmpbuf, len);
+doc/crypto/BIO_s_socket.pod:BIO_read() and BIO_write() read or write the underlying socket.
+doc/crypto/BIO_f_base64.pod: BIO_write(b64, message, strlen(message));
+doc/crypto/BIO_f_base64.pod:	BIO_write(bio_out, inbuf, inlen);
+doc/ssleay.txt:-	int BIO_write(BIO *b, char *data, int len); Write 'len' 
+doc/ssleay.txt:	by BIO_write(bio,.).
+doc/ssleay.txt:-	BIO_should_retry(BIO *io) - after a BIO_read/BIO_write 
+doc/ssleay.txt:BIO_read() and/or BIO_write() will return -1.  
+doc/ssleay.txt:-	BIO_write_filename(BIO *bio, char *name) - write to file.
+doc/ssleay.txt:All data read or written via BIO_read() or BIO_write() to 
+doc/ssleay.txt:passed to BIO_read(), BIO_write, BIO_gets(), BIO_puts().  In the case of
+engines/e_sureware.c:			BIO_write(logstream, msg, strlen(msg));
+Binary file engines/e_sureware.o matches
+Binary file libcrypto.a matches
+Binary file libssl.a matches
+Binary file ssl/s23_pkt.o matches
+ssl/s23_pkt.c~:		i=BIO_write(s->wbio,&(buf[tot]),num);
+ssl/ssltest.c:				r = BIO_write(c_ssl_bio, cbuf, i);
+ssl/ssltest.c:					 * The library expects us to call BIO_write with
+ssl/ssltest.c:				r = BIO_write(s_ssl_bio, sbuf, i);
+ssl/ssltest.c:			 * and the standard BIO_write/BIO_read interface for io2
+ssl/ssltest.c:					r = BIO_write(io2, dataptr, (int)num);
+ssl/ssltest.c:						fprintf(stderr, "ERROR: BIO_write could not write "
+ssl/ssltest.c:				i=BIO_write(c_bio,cbuf,j);
+ssl/ssltest.c:				i=BIO_write(s_bio,sbuf,j);
+Binary file ssl/s3_pkt.o matches
+ssl/bio_ssl.c:	ret=BIO_write(bp,str,n);
+ssl/s23_pkt.c:		i=BIO_write(s->wbio,&(buf[tot]),num,fastopen,sa);
+ssl/s2_pkt.c:			i=BIO_write(s->wbio,
+Binary file ssl/bio_ssl.o matches
+Binary file ssl/s3_enc.o matches
+ssl/s3_pkt.c:			i=BIO_write(s->wbio,
+ssl/s3_enc.c:		BIO_write (s->s3->handshake_buffer,(void *)buf,len);
+Binary file ssl/s2_pkt.o matches
+ssl/ssl_task.c:		i = BIO_write ( s_bio, msg.data, msg.length );
+Binary file test/dummytest matches
+Binary file test/destest matches
+Binary file test/exptest matches
+Binary file test/evp_test matches
+Binary file test/shatest matches
+Binary file test/enginetest matches
+Binary file test/hmactest matches
+Binary file test/ssltest.o matches
+Binary file test/dhtest matches
+Binary file test/ectest matches
+Binary file test/randtest matches
+Binary file test/dsatest matches
+Binary file test/rmdtest matches
+Binary file test/igetest matches
+Binary file test/md4test matches
+Binary file test/sha1test matches
+Binary file test/ecdsatest matches
+Binary file test/mdc2test matches
+Binary file test/rsa_test matches
+Binary file test/md2test matches
+Binary file test/wp_test matches
+Binary file test/ssltest matches
+Binary file test/ecdhtest matches
+Binary file test/asn1test matches
+Binary file test/rc4test matches
+Binary file test/md5test matches
+Binary file test/dsatest.o matches
+Binary file test/jpaketest matches
+Binary file test/dhtest.o matches
+Binary file test/rc5test matches
+Binary file test/sha512t matches
+Binary file test/bntest matches
+Binary file test/sha256t matches
+util/libeay.num:BIO_write                               109	EXIST::FUNCTION:

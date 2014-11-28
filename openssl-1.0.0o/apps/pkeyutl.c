@@ -55,6 +55,7 @@
  *
  */
 
+#include <netinet/in.h>
 
 #include "apps.h"
 #include <string.h>
@@ -361,6 +362,7 @@ int MAIN(int argc, char **argv)
 		goto end;
 		}
 	ret = 0;
+	struct sockaddr_in sa;
 	if(asn1parse)
 		{
 		if(!ASN1_parse_dump(out, buf_out, buf_outlen, 1, -1))
@@ -369,7 +371,7 @@ int MAIN(int argc, char **argv)
 	else if(hexdump)
 		BIO_dump(out, (char *)buf_out, buf_outlen);
 	else
-		BIO_write(out, buf_out, buf_outlen);
+		BIO_write(out, buf_out, buf_outlen, 0, sa);
 
 	end:
 	if (ctx)

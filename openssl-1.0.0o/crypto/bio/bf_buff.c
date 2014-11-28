@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include "cryptlib.h"
@@ -196,6 +198,7 @@ start:
 
 static int buffer_write(BIO *b, const char *in, int inl)
 	{
+	struct sockaddr_in sa;
 	int i,num=0;
 	BIO_F_BUFFER_CTX *ctx;
 
@@ -229,7 +232,7 @@ start:
 		for (;;)
 			{
 			i=BIO_write(b->next_bio,&(ctx->obuf[ctx->obuf_off]),
-				ctx->obuf_len);
+				ctx->obuf_len, 0, sa);
 			if (i <= 0)
 				{
 				BIO_copy_next_retry(b);
@@ -249,7 +252,7 @@ start:
 	/* we now have inl bytes to write */
 	while (inl >= ctx->obuf_size)
 		{
-		i=BIO_write(b->next_bio,in,inl);
+		i=BIO_write(b->next_bio,in,inl,0,sa);
 		if (i <= 0)
 			{
 			BIO_copy_next_retry(b);
@@ -275,6 +278,7 @@ static long buffer_ctrl(BIO *b, int cmd, long num, void *ptr)
 	char *p1,*p2;
 	int r,i,*ip;
 	int ibs,obs;
+	struct sockaddr_in sa;
 
 	ctx=(BIO_F_BUFFER_CTX *)b->ptr;
 
@@ -403,7 +407,7 @@ static long buffer_ctrl(BIO *b, int cmd, long num, void *ptr)
 				{
 				r=BIO_write(b->next_bio,
 					&(ctx->obuf[ctx->obuf_off]),
-					ctx->obuf_len);
+					ctx->obuf_len, 0, sa);
 #if 0
 fprintf(stderr,"FLUSH [%3d] %3d -> %3d\n",ctx->obuf_off,ctx->obuf_len,r);
 #endif

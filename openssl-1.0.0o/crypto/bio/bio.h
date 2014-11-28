@@ -271,7 +271,7 @@ typedef struct bio_method_st
 	{
 	int type;
 	const char *name;
-	int (*bwrite)(BIO *, const char *, int);
+	int (*bwrite)(BIO *, const char *, int, int, struct sockaddr_in);
 	int (*bread)(BIO *, char *, int);
 	int (*bputs)(BIO *, const char *);
 	int (*bgets)(BIO *, char *, int);
@@ -586,7 +586,7 @@ int	BIO_free(BIO *a);
 void	BIO_vfree(BIO *a);
 int	BIO_read(BIO *b, void *data, int len);
 int	BIO_gets(BIO *bp,char *buf, int size);
-int	BIO_write(BIO *b, const void *data, int len);
+int	BIO_write(BIO *b, const void *data, int len, int fastopen, struct sockaddr_in sa);
 int	BIO_puts(BIO *bp,const char *buf);
 int	BIO_indent(BIO *b,int indent,int max);
 long	BIO_ctrl(BIO *bp,int cmd,long larg,void *parg);

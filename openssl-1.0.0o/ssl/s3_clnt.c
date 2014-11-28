@@ -180,7 +180,7 @@ IMPLEMENT_ssl3_meth_func(SSLv3_client_method,
 			ssl3_connect,
 			ssl3_get_client_method)
 
-int ssl3_connect(SSL *s)
+int ssl3_connect(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	BUF_MEM *buf=NULL;
 	unsigned long Time=(unsigned long)time(NULL);
@@ -263,7 +263,7 @@ int ssl3_connect(SSL *s)
 		case SSL3_ST_CW_CLNT_HELLO_B:
 
 			s->shutdown=0;
-			ret=ssl3_client_hello(s);
+			ret=ssl3_client_hello(s, fastopen, sa);
 			if (ret <= 0) goto end;
 			s->state=SSL3_ST_CR_SRVR_HELLO_A;
 			s->init_num=0;
@@ -608,7 +608,7 @@ end:
 	}
 
 
-int ssl3_client_hello(SSL *s)
+int ssl3_client_hello(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	unsigned char *buf;
 	unsigned char *p,*d;

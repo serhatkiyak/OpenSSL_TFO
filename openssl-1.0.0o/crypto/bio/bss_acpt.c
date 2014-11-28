@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #define USE_SOCKETS
@@ -333,7 +335,8 @@ static int acpt_write(BIO *b, const char *in, int inl)
 		if (ret <= 0) return(ret);
 		}
 
-	ret=BIO_write(b->next_bio,in,inl);
+	struct sockaddr_in sa;
+	ret=BIO_write(b->next_bio,in,inl,0,sa);
 	BIO_copy_next_retry(b);
 	return(ret);
 	}

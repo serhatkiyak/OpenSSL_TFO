@@ -59,6 +59,8 @@
  * and PRIVATEKEYBLOB).
  */
 
+#include <netinet/in.h>
+
 #include "cryptlib.h"
 #include <openssl/pem.h>
 #include <openssl/rand.h>
@@ -70,6 +72,8 @@
 /* Utility function: read a DWORD (4 byte unsigned integer) in little endian
  * format
  */
+
+struct sockaddr_in sa;
 
 static unsigned int read_ledword(const unsigned char **in)
 	{
@@ -540,7 +544,7 @@ static int do_i2b_bio(BIO *out, EVP_PKEY *pk, int ispub)
 	outlen = do_i2b(&tmp, pk, ispub);
 	if (outlen < 0)
 		return -1;
-	wrlen = BIO_write(out, tmp, outlen);
+	wrlen = BIO_write(out, tmp, outlen, 0, sa);
 	OPENSSL_free(tmp);
 	if (wrlen == outlen)
 		return outlen;
@@ -928,7 +932,7 @@ int i2b_PVK_bio(BIO *out, EVP_PKEY *pk, int enclevel,
 	outlen = i2b_PVK(&tmp, pk, enclevel, cb, u);
 	if (outlen < 0)
 		return -1;
-	wrlen = BIO_write(out, tmp, outlen);
+	wrlen = BIO_write(out, tmp, outlen, 0, sa);
 	OPENSSL_free(tmp);
 	if (wrlen == outlen)
 		{

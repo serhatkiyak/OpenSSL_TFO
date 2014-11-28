@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include "cryptlib.h"
@@ -143,12 +145,13 @@ static int md_write(BIO *b, const char *in, int inl)
 	{
 	int ret=0;
 	EVP_MD_CTX *ctx;
+	struct sockaddr_in sa;
 
 	if ((in == NULL) || (inl <= 0)) return(0);
 	ctx=b->ptr;
 
 	if ((ctx != NULL) && (b->next_bio != NULL))
-		ret=BIO_write(b->next_bio,in,inl);
+		ret=BIO_write(b->next_bio,in,inl,0,sa);
 	if (b->init)
 		{
 		if (ret > 0)

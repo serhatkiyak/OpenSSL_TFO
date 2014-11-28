@@ -117,6 +117,8 @@
 
 */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include <assert.h>
@@ -283,6 +285,7 @@ static int ok_read(BIO *b, char *out, int outl)
 
 static int ok_write(BIO *b, const char *in, int inl)
 	{
+	struct sockaddr_in sa;
 	int ret=0,n,i;
 	BIO_OK_CTX *ctx;
 
@@ -300,7 +303,7 @@ static int ok_write(BIO *b, const char *in, int inl)
 		n=ctx->buf_len-ctx->buf_off;
 		while (ctx->blockout && n > 0)
 			{
-			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n);
+			i=BIO_write(b->next_bio,&(ctx->buf[ctx->buf_off]),n,0,sa);
 			if (i <= 0)
 				{
 				BIO_copy_next_retry(b);

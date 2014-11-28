@@ -135,6 +135,9 @@
  * OTHERWISE.
  */
 
+
+#include <netinet/in.h>
+
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -1625,6 +1628,7 @@ end:
 
 static void print_stuff(BIO *bio, SSL *s, int full)
 	{
+	struct sockaddr_in sa;
 	X509 *peer=NULL;
 	char *p;
 	static const char *space="                ";
@@ -1686,8 +1690,8 @@ static void print_stuff(BIO *bio, SSL *s, int full)
 				{
 				xn=sk_X509_NAME_value(sk2,i);
 				X509_NAME_oneline(xn,buf,sizeof(buf));
-				BIO_write(bio,buf,strlen(buf));
-				BIO_write(bio,"\n",1);
+				BIO_write(bio,buf,strlen(buf),0,sa);
+				BIO_write(bio,"\n",1,0,sa);
 				}
 			}
 		else
@@ -1708,19 +1712,19 @@ static void print_stuff(BIO *bio, SSL *s, int full)
 				{
 				if (*p == ':')
 					{
-					BIO_write(bio,space,15-j%25);
+					BIO_write(bio,space,15-j%25,0,sa);
 					i++;
 					j=0;
-					BIO_write(bio,((i%3)?" ":"\n"),1);
+					BIO_write(bio,((i%3)?" ":"\n"),1,0,sa);
 					}
 				else
 					{
-					BIO_write(bio,p,1);
+					BIO_write(bio,p,1,0,sa);
 					j++;
 					}
 				p++;
 				}
-			BIO_write(bio,"\n",1);
+			BIO_write(bio,"\n",1,0,sa);
 			}
 
 		BIO_printf(bio,"---\nSSL handshake has read %ld bytes and written %ld bytes\n",

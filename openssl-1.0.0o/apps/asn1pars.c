@@ -60,6 +60,8 @@
  * add the -strparse option which parses nested binary structures
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -355,7 +357,8 @@ bad:
 
 	if ((length == 0) || ((long)length > num)) length=(unsigned int)num;
 	if(derout) {
-		if(BIO_write(derout, str + offset, length) != (int)length) {
+		struct sockaddr_in sa;
+		if(BIO_write(derout, str + offset, length, 0, sa) != (int)length) {
 			BIO_printf(bio_err, "Error writing output\n");
 			ERR_print_errors(bio_err);
 			goto end;

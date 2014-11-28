@@ -135,6 +135,8 @@
  * OTHERWISE.
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "ssl_locl.h"
 #include <openssl/evp.h>
@@ -571,7 +573,8 @@ void ssl3_finish_mac(SSL *s, const unsigned char *buf, int len)
 	{
 	if (s->s3->handshake_buffer) 
 		{
-		BIO_write (s->s3->handshake_buffer,(void *)buf,len);
+		struct sockaddr_in sa;
+		BIO_write (s->s3->handshake_buffer,(void *)buf,len,0,sa);
 		} 
 	else 
 		{

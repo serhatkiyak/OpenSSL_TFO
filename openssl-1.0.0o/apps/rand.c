@@ -53,6 +53,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include "apps.h"
 
 #include <ctype.h>
@@ -208,6 +210,7 @@ int MAIN(int argc, char **argv)
 			goto err;
 		out = BIO_push(b64, out);
 		}
+	struct sockaddr_in sa;
 	
 	while (num > 0) 
 		{
@@ -221,7 +224,7 @@ int MAIN(int argc, char **argv)
 		if (r <= 0)
 			goto err;
 		if (!hex) 
-			BIO_write(out, buf, chunk);
+			BIO_write(out, buf, chunk, 0, sa);
 		else
 			{
 			for (i = 0; i < chunk; i++)

@@ -146,6 +146,8 @@
 #undef OPENSSL_NO_DEPRECATED
 #endif
 
+#include <netinet/in.h>
+
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -305,6 +307,8 @@ static int cert_chain = 0;
 #ifndef OPENSSL_NO_PSK
 static char *psk_identity="Client_identity";
 char *psk_key=NULL; /* by default PSK is not used */
+
+struct sockaddr_in sa;
 
 static unsigned int psk_server_cb(SSL *ssl, const char *identity,
 	unsigned char *psk, unsigned int max_psk_len)
@@ -604,7 +608,7 @@ static int ebcdic_write(BIO *b, const char *in, int inl)
 
 	ebcdic2ascii(wbuf->buff, in, inl);
 
-	ret=BIO_write(b->next_bio, wbuf->buff, inl);
+	ret=BIO_write(b->next_bio, wbuf->buff, inl, 0, sa);
 
 	return(ret);
 }
@@ -2043,7 +2047,7 @@ static int sv_body(char *hostname, int s, unsigned char *context)
 				if (buf[0] == 'P')
 					{
 					static const char *str="Lets print some clear text\n";
-					BIO_write(SSL_get_wbio(con),str,strlen(str));
+					BIO_write(SSL_get_wbio(con),str,strlen(str),0,sa);
 					}
 				if (buf[0] == 'S')
 					{
@@ -2413,7 +2417,7 @@ static int www_body(char *hostname, int s, unsigned char *context)
 			for (i=0; i<local_argc; i++)
 				{
 				BIO_puts(io,local_argv[i]);
-				BIO_write(io," ",1);
+				BIO_write(io," ",1,0,sa);
 				}
 			BIO_puts(io,"\n");
 
@@ -2441,14 +2445,14 @@ static int www_body(char *hostname, int s, unsigned char *context)
 					{
 					if (*p == ':')
 						{
-						BIO_write(io,space,26-j);
+						BIO_write(io,space,26-j,0,sa);
 						i++;
 						j=0;
-						BIO_write(io,((i%3)?" ":"\n"),1);
+						BIO_write(io,((i%3)?" ":"\n"),1,0,sa);
 						}
 					else
 						{
-						BIO_write(io,p,1);
+						BIO_write(io,p,1,0,sa);
 						j++;
 						}
 					p++;
@@ -2594,7 +2598,7 @@ static int www_body(char *hostname, int s, unsigned char *context)
 #ifdef RENEG
 { static count=0; if (++count == 13) { SSL_renegotiate(con); } }
 #endif
-					k=BIO_write(io,&(buf[j]),i-j);
+					k=BIO_write(io,&(buf[j]),i-j,0,sa);
 					if (k <= 0)
 						{
 						if (!BIO_should_retry(io))

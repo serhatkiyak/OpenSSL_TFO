@@ -62,6 +62,8 @@
 #undef OPENSSL_NO_DEPRECATED
 #endif
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -246,7 +248,8 @@ static int MS_CALLBACK dsa_cb(int p, int n, BN_GENCB *arg)
 	if (p == 1) c='+';
 	if (p == 2) { c='*'; ok++; }
 	if (p == 3) c='\n';
-	BIO_write(arg->arg,&c,1);
+	struct sockaddr_in sa;
+	BIO_write(arg->arg,&c,1,0,sa);
 	(void)BIO_flush(arg->arg);
 
 	if (!ok && (p == 0) && (num > 1))

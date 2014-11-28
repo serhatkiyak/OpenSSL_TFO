@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include "cryptlib.h"
@@ -123,10 +125,11 @@ static int nullf_read(BIO *b, char *out, int outl)
 static int nullf_write(BIO *b, const char *in, int inl)
 	{
 	int ret=0;
+	struct sockaddr_in sa;
 
 	if ((in == NULL) || (inl <= 0)) return(0);
 	if (b->next_bio == NULL) return(0);
-	ret=BIO_write(b->next_bio,in,inl);
+	ret=BIO_write(b->next_bio,in,inl,0,sa);
 	BIO_clear_retry_flags(b);
 	BIO_copy_next_retry(b);
 	return(ret);

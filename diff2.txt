@@ -1,0 +1,443 @@
+diff --git a/openssl-1.0.0o/Makefile b/openssl-1.0.0o/Makefile
+index 02b5498..12f8111 100644
+--- a/openssl-1.0.0o/Makefile
++++ b/openssl-1.0.0o/Makefile
+@@ -11,11 +11,11 @@ SHLIB_VERSION_NUMBER=1.0.0
+ SHLIB_VERSION_HISTORY=
+ SHLIB_MAJOR=1
+ SHLIB_MINOR=0.0
+-SHLIB_EXT=
+-PLATFORM=dist
+-OPTIONS= no-gmp no-jpake no-krb5 no-md2 no-rc5 no-rfc3779 no-shared no-store no-zlib no-zlib-dynamic static-engine
+-CONFIGURE_ARGS=dist
+-SHLIB_TARGET=
++SHLIB_EXT=.so.$(SHLIB_MAJOR).$(SHLIB_MINOR)
++PLATFORM=debug-linux-x86_64
++OPTIONS=-Wa,--noexecstack no-gmp no-jpake no-krb5 no-md2 no-rc5 no-rfc3779 no-shared no-store no-zlib no-zlib-dynamic static-engine
++CONFIGURE_ARGS=debug-linux-x86_64 -Wa,--noexecstack
++SHLIB_TARGET=linux-shared
+ 
+ # HERE indicates where this Makefile lives.  This can be used to indicate
+ # where sub-Makefiles are expected to be.  Currently has very limited usage,
+@@ -59,11 +59,11 @@ OPENSSLDIR=/usr/local/ssl
+ # equal 4.
+ # PKCS1_CHECK - pkcs1 tests.
+ 
+-CC= cc
+-CFLAG= -O
++CC= gcc
++CFLAG= -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -Wa,--noexecstack -DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DCRYPTO_MDEBUG -m64 -DL_ENDIAN -DTERMIO -g -Wall -DMD32_REG_T=int -DOPENSSL_IA32_SSE2 -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DMD5_ASM -DAES_ASM -DWHIRLPOOL_ASM
+ DEPFLAG= -DOPENSSL_NO_GMP -DOPENSSL_NO_JPAKE -DOPENSSL_NO_MD2 -DOPENSSL_NO_RC5 -DOPENSSL_NO_RFC3779 -DOPENSSL_NO_STORE
+ PEX_LIBS= 
+-EX_LIBS= 
++EX_LIBS= -ldl
+ EXE_EXT= 
+ ARFLAGS= 
+ AR= ar $(ARFLAGS) r
+@@ -72,7 +72,7 @@ NM= nm
+ PERL= /usr/bin/perl
+ TAR= tar
+ TARFLAGS= --no-recursion
+-MAKEDEPPROG=makedepend
++MAKEDEPPROG= gcc
+ LIBDIR=lib
+ 
+ # We let the C compiler driver to take care of .s files. This is done in
+@@ -88,20 +88,20 @@ ASFLAG=$(CFLAG)
+ PROCESSOR= 
+ 
+ # CPUID module collects small commonly used assembler snippets
+-CPUID_OBJ= mem_clr.o
+-BN_ASM= bn_asm.o
++CPUID_OBJ= x86_64cpuid.o
++BN_ASM= x86_64-gcc.o x86_64-mont.o
+ DES_ENC= des_enc.o fcrypt_b.o
+-AES_ENC= aes_core.o aes_cbc.o
++AES_ENC= aes-x86_64.o
+ BF_ENC= bf_enc.o
+ CAST_ENC= c_enc.o
+-RC4_ENC= rc4_enc.o rc4_skey.o
++RC4_ENC= rc4-x86_64.o
+ RC5_ENC= rc5_enc.o
+-MD5_ASM_OBJ= 
+-SHA1_ASM_OBJ= 
++MD5_ASM_OBJ= md5-x86_64.o
++SHA1_ASM_OBJ= sha1-x86_64.o sha256-x86_64.o sha512-x86_64.o
+ RMD160_ASM_OBJ= 
+-WP_ASM_OBJ= wp_block.o
+-CMLL_ENC= camellia.o cmll_misc.o cmll_cbc.o
+-PERLASM_SCHEME= 
++WP_ASM_OBJ= wp-x86_64.o
++CMLL_ENC= cmll-x86_64.o cmll_misc.o
++PERLASM_SCHEME= elf
+ 
+ # KRB5 stuff
+ KRB5_INCLUDES=
+@@ -149,8 +149,8 @@ LIBS=   libcrypto.a libssl.a
+ SHARED_CRYPTO=libcrypto$(SHLIB_EXT)
+ SHARED_SSL=libssl$(SHLIB_EXT)
+ SHARED_LIBS=
+-SHARED_LIBS_LINK_EXTS=
+-SHARED_LDFLAGS=
++SHARED_LIBS_LINK_EXTS=.so.$(SHLIB_MAJOR) .so
++SHARED_LDFLAGS=-m64
+ 
+ GENERAL=        Makefile
+ BASENAME=       openssl
+diff --git a/openssl-1.0.0o/Makefile.bak b/openssl-1.0.0o/Makefile.bak
+index c8f536c..12f8111 100644
+--- a/openssl-1.0.0o/Makefile.bak
++++ b/openssl-1.0.0o/Makefile.bak
+@@ -4,18 +4,18 @@
+ ## Makefile for OpenSSL
+ ##
+ 
+-VERSION=1.0.0o-dev
++VERSION=1.0.0o
+ MAJOR=1
+ MINOR=0.0
+ SHLIB_VERSION_NUMBER=1.0.0
+ SHLIB_VERSION_HISTORY=
+ SHLIB_MAJOR=1
+ SHLIB_MINOR=0.0
+-SHLIB_EXT=
+-PLATFORM=gcc
+-OPTIONS= no-gmp no-jpake no-krb5 no-md2 no-rc5 no-rfc3779 no-shared no-store no-zlib no-zlib-dynamic static-engine
+-CONFIGURE_ARGS=gcc
+-SHLIB_TARGET=
++SHLIB_EXT=.so.$(SHLIB_MAJOR).$(SHLIB_MINOR)
++PLATFORM=debug-linux-x86_64
++OPTIONS=-Wa,--noexecstack no-gmp no-jpake no-krb5 no-md2 no-rc5 no-rfc3779 no-shared no-store no-zlib no-zlib-dynamic static-engine
++CONFIGURE_ARGS=debug-linux-x86_64 -Wa,--noexecstack
++SHLIB_TARGET=linux-shared
+ 
+ # HERE indicates where this Makefile lives.  This can be used to indicate
+ # where sub-Makefiles are expected to be.  Currently has very limited usage,
+@@ -60,10 +60,10 @@ OPENSSLDIR=/usr/local/ssl
+ # PKCS1_CHECK - pkcs1 tests.
+ 
+ CC= gcc
+-CFLAG= -O3
++CFLAG= -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -Wa,--noexecstack -DBN_DEBUG -DREF_CHECK -DCONF_DEBUG -DCRYPTO_MDEBUG -m64 -DL_ENDIAN -DTERMIO -g -Wall -DMD32_REG_T=int -DOPENSSL_IA32_SSE2 -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DMD5_ASM -DAES_ASM -DWHIRLPOOL_ASM
+ DEPFLAG= -DOPENSSL_NO_GMP -DOPENSSL_NO_JPAKE -DOPENSSL_NO_MD2 -DOPENSSL_NO_RC5 -DOPENSSL_NO_RFC3779 -DOPENSSL_NO_STORE
+ PEX_LIBS= 
+-EX_LIBS= 
++EX_LIBS= -ldl
+ EXE_EXT= 
+ ARFLAGS= 
+ AR= ar $(ARFLAGS) r
+@@ -88,20 +88,20 @@ ASFLAG=$(CFLAG)
+ PROCESSOR= 
+ 
+ # CPUID module collects small commonly used assembler snippets
+-CPUID_OBJ= mem_clr.o
+-BN_ASM= bn_asm.o
++CPUID_OBJ= x86_64cpuid.o
++BN_ASM= x86_64-gcc.o x86_64-mont.o
+ DES_ENC= des_enc.o fcrypt_b.o
+-AES_ENC= aes_core.o aes_cbc.o
++AES_ENC= aes-x86_64.o
+ BF_ENC= bf_enc.o
+ CAST_ENC= c_enc.o
+-RC4_ENC= rc4_enc.o rc4_skey.o
++RC4_ENC= rc4-x86_64.o
+ RC5_ENC= rc5_enc.o
+-MD5_ASM_OBJ= 
+-SHA1_ASM_OBJ= 
++MD5_ASM_OBJ= md5-x86_64.o
++SHA1_ASM_OBJ= sha1-x86_64.o sha256-x86_64.o sha512-x86_64.o
+ RMD160_ASM_OBJ= 
+-WP_ASM_OBJ= wp_block.o
+-CMLL_ENC= camellia.o cmll_misc.o cmll_cbc.o
+-PERLASM_SCHEME= 
++WP_ASM_OBJ= wp-x86_64.o
++CMLL_ENC= cmll-x86_64.o cmll_misc.o
++PERLASM_SCHEME= elf
+ 
+ # KRB5 stuff
+ KRB5_INCLUDES=
+@@ -149,8 +149,8 @@ LIBS=   libcrypto.a libssl.a
+ SHARED_CRYPTO=libcrypto$(SHLIB_EXT)
+ SHARED_SSL=libssl$(SHLIB_EXT)
+ SHARED_LIBS=
+-SHARED_LIBS_LINK_EXTS=
+-SHARED_LDFLAGS=
++SHARED_LIBS_LINK_EXTS=.so.$(SHLIB_MAJOR) .so
++SHARED_LDFLAGS=-m64
+ 
+ GENERAL=        Makefile
+ BASENAME=       openssl
+diff --git a/openssl-1.0.0o/crypto/objects/obj_xref.h b/openssl-1.0.0o/crypto/objects/obj_xref.h
+index 7836f01..7f2a025 100644
+--- a/openssl-1.0.0o/crypto/objects/obj_xref.h
++++ b/openssl-1.0.0o/crypto/objects/obj_xref.h
+@@ -1,4 +1,4 @@
+-/* AUTOGENERATED BY crypto/objects/objxref.pl, DO NOT EDIT */
++/* AUTOGENERATED BY objxref.pl, DO NOT EDIT */
+ 
+ typedef struct
+ 	{
+@@ -42,8 +42,8 @@ static const nid_triple sigoid_srt[] =
+ 
+ static const nid_triple * const sigoid_srt_xref[] =
+ 	{
+-	&sigoid_srt[17],
+ 	&sigoid_srt[18],
++	&sigoid_srt[17],
+ 	&sigoid_srt[0],
+ 	&sigoid_srt[1],
+ 	&sigoid_srt[7],
+diff --git a/openssl-1.0.0o/crypto/opensslconf.h b/openssl-1.0.0o/crypto/opensslconf.h
+index c21b391..ead0da5 100644
+--- a/openssl-1.0.0o/crypto/opensslconf.h
++++ b/openssl-1.0.0o/crypto/opensslconf.h
+@@ -29,6 +29,9 @@
+ 
+ #endif /* OPENSSL_DOING_MAKEDEPEND */
+ 
++#ifndef OPENSSL_THREADS
++# define OPENSSL_THREADS
++#endif
+ #ifndef OPENSSL_NO_DYNAMIC_ENGINE
+ # define OPENSSL_NO_DYNAMIC_ENGINE
+ #endif
+@@ -61,6 +64,8 @@
+ # endif
+ #endif
+ 
++#define OPENSSL_CPUID_OBJ
++
+ /* crypto/opensslconf.h.in */
+ 
+ /* Generate 80386 code? */
+@@ -107,7 +112,7 @@
+  * This enables code handling data aligned at natural CPU word
+  * boundary. See crypto/rc4/rc4_enc.c for further details.
+  */
+-#undef RC4_CHUNK
++#define RC4_CHUNK unsigned long
+ #endif
+ #endif
+ 
+@@ -115,7 +120,7 @@
+ /* If this is set to 'unsigned int' on a DEC Alpha, this gives about a
+  * %20 speed up (longs are 8 bytes, int's are 4). */
+ #ifndef DES_LONG
+-#define DES_LONG unsigned long
++#define DES_LONG unsigned int
+ #endif
+ #endif
+ 
+@@ -126,9 +131,9 @@
+ /* Should we define BN_DIV2W here? */
+ 
+ /* Only one for the following should be defined */
+-#undef SIXTY_FOUR_BIT_LONG
++#define SIXTY_FOUR_BIT_LONG
+ #undef SIXTY_FOUR_BIT
+-#define THIRTY_TWO_BIT
++#undef THIRTY_TWO_BIT
+ #endif
+ 
+ #if defined(HEADER_RC4_LOCL_H) && !defined(CONFIG_HEADER_RC4_LOCL_H)
+@@ -170,7 +175,7 @@ YOU SHOULD NOT HAVE BOTH DES_RISC1 AND DES_RISC2 DEFINED!!!!!
+ /* Unroll the inner loop, this sometimes helps, sometimes hinders.
+  * Very mucy CPU dependant */
+ #ifndef DES_UNROLL
+-#undef DES_UNROLL
++#define DES_UNROLL
+ #endif
+ 
+ /* These default values were supplied by
+diff --git a/openssl-1.0.0o/ssl/d1_clnt.c b/openssl-1.0.0o/ssl/d1_clnt.c
+index d8cf926..85ac2f1 100644
+--- a/openssl-1.0.0o/ssl/d1_clnt.c
++++ b/openssl-1.0.0o/ssl/d1_clnt.c
+@@ -144,7 +144,17 @@ IMPLEMENT_dtls1_meth_func(DTLSv1_client_method,
+ 			dtls1_connect,
+ 			dtls1_get_client_method)
+ 
+-int dtls1_connect(SSL *s)
++int dtls1_connect_tfo(SSL *s, struct sockaddr_in sa) //TCP_FastOpen
++	{
++	dtls1_connect_1(s, 1, sa);
++	}
++
++int dtls1_connect(SSL *s) //Original
++	{
++	dtls1_connect_1(s, 0, NULL);
++	}
++
++int dtls1_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
+ 	{
+ 	BUF_MEM *buf=NULL;
+ 	unsigned long Time=(unsigned long)time(NULL);
+diff --git a/openssl-1.0.0o/ssl/s23_clnt.c b/openssl-1.0.0o/ssl/s23_clnt.c
+index 72e7b20..876f807 100644
+--- a/openssl-1.0.0o/ssl/s23_clnt.c
++++ b/openssl-1.0.0o/ssl/s23_clnt.c
+@@ -140,7 +140,17 @@ IMPLEMENT_ssl23_meth_func(SSLv23_client_method,
+ 			ssl23_connect,
+ 			ssl23_get_client_method)
+ 
+-int ssl23_connect(SSL *s)
++int ssl23_connect_tfo(SSL *s, struct sockaddr_in sa) //TCP_FastOpen
++	{
++	ssl23_connect_1(s, 1, sa);
++	}
++
++int ssl23_connect(SSL *s) //Original
++	{
++	ssl23_connect_1(s, 0, NULL);
++	}
++
++int ssl23_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
+ 	{
+ 	BUF_MEM *buf=NULL;
+ 	unsigned long Time=(unsigned long)time(NULL);
+diff --git a/openssl-1.0.0o/ssl/s2_clnt.c b/openssl-1.0.0o/ssl/s2_clnt.c
+index 03b6cf9..c128382 100644
+--- a/openssl-1.0.0o/ssl/s2_clnt.c
++++ b/openssl-1.0.0o/ssl/s2_clnt.c
+@@ -142,7 +142,17 @@ IMPLEMENT_ssl2_meth_func(SSLv2_client_method,
+ 			ssl2_connect,
+ 			ssl2_get_client_method)
+ 
+-int ssl2_connect(SSL *s)
++int ssl2_connect_tfo(SSL *s, struct sockaddr_in sa) //TCP_FastOpen
++	{
++	ssl2_connect_1(s, 1, sa);
++	}
++
++int ssl2_connect(SSL *s) //Original
++	{
++	ssl2_connect_1(s, 0, NULL);
++	}
++
++int ssl2_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
+ 	{
+ 	unsigned long l=(unsigned long)time(NULL);
+ 	BUF_MEM *buf=NULL;
+diff --git a/openssl-1.0.0o/ssl/s3_clnt.c b/openssl-1.0.0o/ssl/s3_clnt.c
+index 89dc06e..2a8b970 100644
+--- a/openssl-1.0.0o/ssl/s3_clnt.c
++++ b/openssl-1.0.0o/ssl/s3_clnt.c
+@@ -180,7 +180,17 @@ IMPLEMENT_ssl3_meth_func(SSLv3_client_method,
+ 			ssl3_connect,
+ 			ssl3_get_client_method)
+ 
+-int ssl3_connect(SSL *s)
++int ssl3_connect_tfo(SSL *s, struct sockaddr_in sa) //TCP_FastOpen
++	{
++	ssl3_connect_1(s, 1, sa);
++	}
++
++int ssl3_connect(SSL *s) //Original
++	{
++	ssl3_connect_1(s, 0, NULL);
++	}
++
++int ssl3_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
+ 	{
+ 	BUF_MEM *buf=NULL;
+ 	unsigned long Time=(unsigned long)time(NULL);
+diff --git a/openssl-1.0.0o/ssl/ssl.h b/openssl-1.0.0o/ssl/ssl.h
+index 70aff9d..85aea16 100644
+--- a/openssl-1.0.0o/ssl/ssl.h
++++ b/openssl-1.0.0o/ssl/ssl.h
+@@ -143,6 +143,8 @@
+ #ifndef HEADER_SSL_H 
+ #define HEADER_SSL_H 
+ 
++#include <netinet/in.h>
++
+ #include <openssl/e_os2.h>
+ 
+ #ifndef OPENSSL_NO_COMP
+@@ -390,7 +392,8 @@ typedef struct ssl_method_st
+ 	void (*ssl_clear)(SSL *s);
+ 	void (*ssl_free)(SSL *s);
+ 	int (*ssl_accept)(SSL *s);
+-	int (*ssl_connect)(SSL *s);
++	int (*ssl_connect_tfo)(SSL *s, struct sockaddr_in sa); //TCP_FastOpen
++	int (*ssl_connect)(SSL *s); //Original
+ 	int (*ssl_read)(SSL *s,void *buf,int len);
+ 	int (*ssl_peek)(SSL *s,void *buf,int len);
+ 	int (*ssl_write)(SSL *s,const void *buf,int len);
+@@ -1624,7 +1627,8 @@ int SSL_set1_param(SSL *ssl, X509_VERIFY_PARAM *vpm);
+ 
+ void	SSL_free(SSL *ssl);
+ int 	SSL_accept(SSL *ssl);
+-int 	SSL_connect(SSL *ssl);
++int 	SSL_connect_tfo(SSL *ssl, struct sockaddr_in sa); //TCP_FastOpen
++int 	SSL_connect(SSL *ssl); //Original
+ int 	SSL_read(SSL *ssl,void *buf,int num);
+ int 	SSL_peek(SSL *ssl,void *buf,int num);
+ int 	SSL_write(SSL *ssl,const void *buf,int num);
+diff --git a/openssl-1.0.0o/ssl/ssl_lib.c b/openssl-1.0.0o/ssl/ssl_lib.c
+index f45b362..c3e3f57 100644
+--- a/openssl-1.0.0o/ssl/ssl_lib.c
++++ b/openssl-1.0.0o/ssl/ssl_lib.c
+@@ -924,7 +924,17 @@ int SSL_accept(SSL *s)
+ 	return(s->method->ssl_accept(s));
+ 	}
+ 
+-int SSL_connect(SSL *s)
++int SSL_connect_tfo(SSL *s, struct sockaddr_in sa) //TCP_FastOpen
++	{
++	SSL_connect_1(s, 1, sa);	
++	}
++
++int SSL_connect(SSL *s) //Original
++	{
++	SSL_connect_1(s, 0, NULL);	
++	}
++
++int SSL_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
+ 	{
+ 	if (s->handshake_func == 0)
+ 		/* Not properly initialized yet */
+diff --git a/openssl-1.0.0o/ssl/ssl_locl.h b/openssl-1.0.0o/ssl/ssl_locl.h
+index 2a80b8a..658f5a6 100644
+--- a/openssl-1.0.0o/ssl/ssl_locl.h
++++ b/openssl-1.0.0o/ssl/ssl_locl.h
+@@ -844,7 +844,8 @@ const SSL_CIPHER *ssl2_get_cipher(unsigned int u);
+ int	ssl2_new(SSL *s);
+ void	ssl2_free(SSL *s);
+ int	ssl2_accept(SSL *s);
+-int	ssl2_connect(SSL *s);
++int	ssl2_connect_tfo(SSL *s, struct sockaddr_in sa); //TCP_FastOpen
++int	ssl2_connect(SSL *s); //Original
+ int	ssl2_read(SSL *s, void *buf, int len);
+ int	ssl2_peek(SSL *s, void *buf, int len);
+ int	ssl2_write(SSL *s, const void *buf, int len);
+@@ -900,7 +901,8 @@ int	ssl3_digest_cached_records(SSL *s);
+ int	ssl3_new(SSL *s);
+ void	ssl3_free(SSL *s);
+ int	ssl3_accept(SSL *s);
+-int	ssl3_connect(SSL *s);
++int	ssl3_connect_tfo(SSL *s, struct sockaddr_in sa); //TCP_FastOpen
++int	ssl3_connect(SSL *s); //Original
+ int	ssl3_read(SSL *s, void *buf, int len);
+ int	ssl3_peek(SSL *s, void *buf, int len);
+ int	ssl3_write(SSL *s, const void *buf, int len);
+@@ -1010,7 +1012,8 @@ int dtls1_send_server_done(SSL *s);
+ 
+ 
+ int ssl23_accept(SSL *s);
+-int ssl23_connect(SSL *s);
++int ssl23_connect_tfo(SSL *s, struct sockaddr_in sa); //TCP_FastOpen
++int ssl23_connect(SSL *s); //Original
+ int ssl23_read_bytes(SSL *s, int n);
+ int ssl23_write_bytes(SSL *s);
+ 
+@@ -1022,7 +1025,8 @@ long tls1_callback_ctrl(SSL *s,int cmd, void (*fp)(void));
+ 
+ int dtls1_new(SSL *s);
+ int	dtls1_accept(SSL *s);
+-int	dtls1_connect(SSL *s);
++int	dtls1_connect_tfo(SSL *s, struct sockaddr_in sa); //TCP_FastOpen
++int	dtls1_connect(SSL *s); //Original
+ void dtls1_free(SSL *s);
+ void dtls1_clear(SSL *s);
+ long dtls1_ctrl(SSL *s,int cmd, long larg, void *parg);

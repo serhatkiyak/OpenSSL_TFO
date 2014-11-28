@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/objects.h>
@@ -65,6 +67,7 @@
 int ASN1_bn_print(BIO *bp, const char *number, const BIGNUM *num,
 			unsigned char *buf, int off)
 	{
+	struct sockaddr_in sa;
 	int n,i;
 	const char *neg;
 
@@ -108,7 +111,7 @@ int ASN1_bn_print(BIO *bp, const char *number, const BIGNUM *num,
 			if (BIO_printf(bp,"%02x%s",buf[i],((i+1) == n)?"":":")
 				<= 0) return(0);
 			}
-		if (BIO_write(bp,"\n",1) <= 0) return(0);
+		if (BIO_write(bp,"\n",1,0,sa) <= 0) return(0);
 		}
 	return(1);
 	}

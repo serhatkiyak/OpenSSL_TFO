@@ -51,6 +51,8 @@
  * ====================================================================
  */
 
+#include <netinet/in.h>
+
 #include "cryptlib.h"
 #include <openssl/asn1t.h>
 #include <openssl/x509.h>
@@ -61,6 +63,7 @@
 
 static int cms_copy_content(BIO *out, BIO *in, unsigned int flags)
 	{
+	struct sockaddr_in sa;
 	unsigned char buf[4096];
 	int r = 0, i;
 	BIO *tmpout = NULL;
@@ -97,7 +100,7 @@ static int cms_copy_content(BIO *out, BIO *in, unsigned int flags)
 			break;
 			}
 				
-		if (tmpout && (BIO_write(tmpout, buf, i) != i))
+		if (tmpout && (BIO_write(tmpout, buf, i, 0, sa) != i))
 			goto err;
 	}
 

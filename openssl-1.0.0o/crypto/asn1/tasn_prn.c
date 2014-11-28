@@ -56,6 +56,7 @@
  *
  */
 
+#include <netinet/in.h>
 
 #include <stddef.h>
 #include "cryptlib.h"
@@ -401,6 +402,7 @@ static int asn1_print_fsname(BIO *out, int indent,
 			const char *fname, const char *sname,
 			const ASN1_PCTX *pctx)
 	{
+	struct sockaddr_in sa;
 	static char spaces[] = "                    ";
 	const int nspaces = sizeof(spaces) - 1;
 
@@ -411,11 +413,11 @@ static int asn1_print_fsname(BIO *out, int indent,
 
 	while (indent > nspaces)
 		{
-		if (BIO_write(out, spaces, nspaces) != nspaces)
+		if (BIO_write(out, spaces, nspaces, 0, sa) != nspaces)
 			return 0;
 		indent -= nspaces;
 		}
-	if (BIO_write(out, spaces, indent) != indent)
+	if (BIO_write(out, spaces, indent, 0, sa) != indent)
 		return 0;
 	if (pctx->flags & ASN1_PCTX_FLAGS_NO_STRUCT_NAME)
 		sname = NULL;
@@ -441,7 +443,7 @@ static int asn1_print_fsname(BIO *out, int indent,
 				return 0;
 			}
 		}
-	if (BIO_write(out, ": ", 2) != 2)
+	if (BIO_write(out, ": ", 2, 0, sa) != 2)
 		return 0;
 	return 1;
 	}

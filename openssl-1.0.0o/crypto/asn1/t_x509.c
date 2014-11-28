@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/buffer.h>
@@ -72,6 +74,8 @@
 #include <openssl/objects.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
+
+struct sockaddr_in sa;
 
 #ifndef OPENSSL_NO_FP_API
 int X509_print_fp(FILE *fp, X509 *x)
@@ -123,8 +127,8 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags, unsigned long cflag)
 	ci=x->cert_info;
 	if(!(cflag & X509_FLAG_NO_HEADER))
 		{
-		if (BIO_write(bp,"Certificate:\n",13) <= 0) goto err;
-		if (BIO_write(bp,"    Data:\n",10) <= 0) goto err;
+		if (BIO_write(bp,"Certificate:\n",13,0,sa) <= 0) goto err;
+		if (BIO_write(bp,"    Data:\n",10,0,sa) <= 0) goto err;
 		}
 	if(!(cflag & X509_FLAG_NO_VERSION))
 		{
@@ -134,7 +138,7 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags, unsigned long cflag)
 	if(!(cflag & X509_FLAG_NO_SERIAL))
 		{
 
-		if (BIO_write(bp,"        Serial Number:",22) <= 0) goto err;
+		if (BIO_write(bp,"        Serial Number:",22,0,sa) <= 0) goto err;
 
 		bs=X509_get_serialNumber(x);
 		if (bs->length <= 4)
@@ -179,26 +183,26 @@ int X509_print_ex(BIO *bp, X509 *x, unsigned long nmflags, unsigned long cflag)
 		{
 		if (BIO_printf(bp,"        Issuer:%c",mlch) <= 0) goto err;
 		if (X509_NAME_print_ex(bp,X509_get_issuer_name(x),nmindent, nmflags) < 0) goto err;
-		if (BIO_write(bp,"\n",1) <= 0) goto err;
+		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
 		}
 	if(!(cflag & X509_FLAG_NO_VALIDITY))
 		{
-		if (BIO_write(bp,"        Validity\n",17) <= 0) goto err;
-		if (BIO_write(bp,"            Not Before: ",24) <= 0) goto err;
+		if (BIO_write(bp,"        Validity\n",17,0,sa) <= 0) goto err;
+		if (BIO_write(bp,"            Not Before: ",24,0,sa) <= 0) goto err;
 		if (!ASN1_TIME_print(bp,X509_get_notBefore(x))) goto err;
-		if (BIO_write(bp,"\n            Not After : ",25) <= 0) goto err;
+		if (BIO_write(bp,"\n            Not After : ",25,0,sa) <= 0) goto err;
 		if (!ASN1_TIME_print(bp,X509_get_notAfter(x))) goto err;
-		if (BIO_write(bp,"\n",1) <= 0) goto err;
+		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
 		}
 	if(!(cflag & X509_FLAG_NO_SUBJECT))
 		{
 		if (BIO_printf(bp,"        Subject:%c",mlch) <= 0) goto err;
 		if (X509_NAME_print_ex(bp,X509_get_subject_name(x),nmindent, nmflags) < 0) goto err;
-		if (BIO_write(bp,"\n",1) <= 0) goto err;
+		if (BIO_write(bp,"\n",1,0,sa) <= 0) goto err;
 		}
 	if(!(cflag & X509_FLAG_NO_PUBKEY))
 		{
-		if (BIO_write(bp,"        Subject Public Key Info:\n",33) <= 0)
+		if (BIO_write(bp,"        Subject Public Key Info:\n",33,0,sa) <= 0)
 			goto err;
 		if (BIO_printf(bp,"%12sPublic Key Algorithm: ","") <= 0)
 			goto err;
@@ -295,11 +299,11 @@ int X509_signature_print(BIO *bp, X509_ALGOR *sigalg, ASN1_STRING *sig)
 	for (i=0; i<n; i++)
 		{
 		if ((i%18) == 0)
-			if (BIO_write(bp,"\n        ",9) <= 0) return 0;
+			if (BIO_write(bp,"\n        ",9,0,sa) <= 0) return 0;
 			if (BIO_printf(bp,"%02x%s",s[i],
 				((i+1) == n)?"":":") <= 0) return 0;
 		}
-	if (BIO_write(bp,"\n",1) != 1) return 0;
+	if (BIO_write(bp,"\n",1,0,sa) != 1) return 0;
 	return 1;
 }
 
@@ -322,13 +326,13 @@ int ASN1_STRING_print(BIO *bp, const ASN1_STRING *v)
 		n++;
 		if (n >= 80)
 			{
-			if (BIO_write(bp,buf,n) <= 0)
+			if (BIO_write(bp,buf,n,0,sa) <= 0)
 				return(0);
 			n=0;
 			}
 		}
 	if (n > 0)
-		if (BIO_write(bp,buf,n) <= 0)
+		if (BIO_write(bp,buf,n,0,sa) <= 0)
 			return(0);
 	return(1);
 	}
@@ -338,7 +342,7 @@ int ASN1_TIME_print(BIO *bp, const ASN1_TIME *tm)
 	if(tm->type == V_ASN1_UTCTIME) return ASN1_UTCTIME_print(bp, tm);
 	if(tm->type == V_ASN1_GENERALIZEDTIME)
 				return ASN1_GENERALIZEDTIME_print(bp, tm);
-	BIO_write(bp,"Bad time value",14);
+	BIO_write(bp,"Bad time value",14,0,sa);
 	return(0);
 }
 
@@ -392,7 +396,7 @@ int ASN1_GENERALIZEDTIME_print(BIO *bp, const ASN1_GENERALIZEDTIME *tm)
 	else
 		return(1);
 err:
-	BIO_write(bp,"Bad time value",14);
+	BIO_write(bp,"Bad time value",14,0,sa);
 	return(0);
 	}
 
@@ -428,7 +432,7 @@ int ASN1_UTCTIME_print(BIO *bp, const ASN1_UTCTIME *tm)
 	else
 		return(1);
 err:
-	BIO_write(bp,"Bad time value",14);
+	BIO_write(bp,"Bad time value",14,0,sa);
 	return(0);
 	}
 
@@ -471,11 +475,11 @@ int X509_NAME_print(BIO *bp, X509_NAME *name, int obase)
 #endif
 			{
 			i=s-c;
-			if (BIO_write(bp,c,i) != i) goto err;
+			if (BIO_write(bp,c,i,0,sa) != i) goto err;
 			c=s+1;	/* skip following slash */
 			if (*s != '\0')
 				{
-				if (BIO_write(bp,", ",2) != 2) goto err;
+				if (BIO_write(bp,", ",2,0,sa) != 2) goto err;
 				}
 			l--;
 			}

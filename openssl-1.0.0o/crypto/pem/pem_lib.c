@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include <ctype.h>
 #include "cryptlib.h"
@@ -587,6 +589,7 @@ int PEM_write(FILE *fp, char *name, char *header, unsigned char *data,
 int PEM_write_bio(BIO *bp, const char *name, char *header, unsigned char *data,
 	     long len)
 	{
+	struct sockaddr_in sa;
 	int nlen,n,i,j,outl;
 	unsigned char *buf = NULL;
 	EVP_ENCODE_CTX ctx;
@@ -595,16 +598,16 @@ int PEM_write_bio(BIO *bp, const char *name, char *header, unsigned char *data,
 	EVP_EncodeInit(&ctx);
 	nlen=strlen(name);
 
-	if (	(BIO_write(bp,"-----BEGIN ",11) != 11) ||
-		(BIO_write(bp,name,nlen) != nlen) ||
-		(BIO_write(bp,"-----\n",6) != 6))
+	if (	(BIO_write(bp,"-----BEGIN ",11,0,sa) != 11) ||
+		(BIO_write(bp,name,nlen,0,sa) != nlen) ||
+		(BIO_write(bp,"-----\n",6,0,sa) != 6))
 		goto err;
 		
 	i=strlen(header);
 	if (i > 0)
 		{
-		if (	(BIO_write(bp,header,i) != i) ||
-			(BIO_write(bp,"\n",1) != 1))
+		if (	(BIO_write(bp,header,i,0,sa) != i) ||
+			(BIO_write(bp,"\n",1,0,sa) != 1))
 			goto err;
 		}
 
@@ -620,20 +623,20 @@ int PEM_write_bio(BIO *bp, const char *name, char *header, unsigned char *data,
 		{
 		n=(int)((len>(PEM_BUFSIZE*5))?(PEM_BUFSIZE*5):len);
 		EVP_EncodeUpdate(&ctx,buf,&outl,&(data[j]),n);
-		if ((outl) && (BIO_write(bp,(char *)buf,outl) != outl))
+		if ((outl) && (BIO_write(bp,(char *)buf,outl,0,sa) != outl))
 			goto err;
 		i+=outl;
 		len-=n;
 		j+=n;
 		}
 	EVP_EncodeFinal(&ctx,buf,&outl);
-	if ((outl > 0) && (BIO_write(bp,(char *)buf,outl) != outl)) goto err;
+	if ((outl > 0) && (BIO_write(bp,(char *)buf,outl,0,sa) != outl)) goto err;
 	OPENSSL_cleanse(buf, PEM_BUFSIZE*8);
 	OPENSSL_free(buf);
 	buf = NULL;
-	if (	(BIO_write(bp,"-----END ",9) != 9) ||
-		(BIO_write(bp,name,nlen) != nlen) ||
-		(BIO_write(bp,"-----\n",6) != 6))
+	if (	(BIO_write(bp,"-----END ",9,0,sa) != 9) ||
+		(BIO_write(bp,name,nlen,0,sa) != nlen) ||
+		(BIO_write(bp,"-----\n",6,0,sa) != 6))
 		goto err;
 	return(i+outl);
 err:

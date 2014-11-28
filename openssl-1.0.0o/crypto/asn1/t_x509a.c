@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/evp.h>
@@ -104,7 +106,8 @@ int X509_CERT_AUX_print(BIO *out, X509_CERT_AUX *aux, int indent)
 			BIO_printf(out, "%s%02X", 
 				i ? ":" : "",
 				aux->keyid->data[i]);
-		BIO_write(out,"\n",1);
+		struct sockaddr_in sa;
+		BIO_write(out,"\n",1,0,sa);
 	}
 	return 1;
 }

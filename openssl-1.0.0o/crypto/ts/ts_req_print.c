@@ -56,6 +56,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <stdio.h>
 #include "cryptlib.h"
 #include <openssl/objects.h>
@@ -91,7 +93,8 @@ int TS_REQ_print_bio(BIO *bio, TS_REQ *a)
 		BIO_printf(bio, "unspecified");
 	else
 		TS_ASN1_INTEGER_print_bio(bio, nonce);
-	BIO_write(bio, "\n", 1);
+	struct sockaddr_in sa;
+	BIO_write(bio, "\n", 1, 0, sa);
 
 	BIO_printf(bio, "Certificate required: %s\n", 
 		   TS_REQ_get_cert_req(a) ? "yes" : "no");

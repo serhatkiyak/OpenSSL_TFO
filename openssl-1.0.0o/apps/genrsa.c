@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <openssl/opensslconf.h>
 /* Until the key-gen callbacks are modified to use newer prototypes, we allow
  * deprecated functions for openssl-internal code */
@@ -319,7 +321,8 @@ static int MS_CALLBACK genrsa_cb(int p, int n, BN_GENCB *cb)
 	if (p == 1) c='+';
 	if (p == 2) c='*';
 	if (p == 3) c='\n';
-	BIO_write(cb->arg,&c,1);
+	struct sockaddr_in sa;
+	BIO_write(cb->arg,&c,1,0,sa);
 	(void)BIO_flush(cb->arg);
 #ifdef LINT
 	p=n;

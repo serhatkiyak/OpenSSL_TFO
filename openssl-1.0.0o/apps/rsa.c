@@ -56,6 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
+#include <netinet/in.h>
+
 #include <openssl/opensslconf.h>
 #ifndef OPENSSL_NO_RSA
 #include <stdio.h>
@@ -395,7 +397,8 @@ bad:
 			}
 		pp=p;
 		i2d_RSA_NET(rsa,&p,NULL, sgckey);
-		BIO_write(out,(char *)pp,size);
+		struct sockaddr_in sa;
+		BIO_write(out,(char *)pp,size,0,sa);
 		OPENSSL_free(pp);
 		}
 #endif

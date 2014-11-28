@@ -143,6 +143,8 @@
 #ifndef HEADER_SSL_H 
 #define HEADER_SSL_H 
 
+#include <netinet/in.h>
+
 #include <openssl/e_os2.h>
 
 #ifndef OPENSSL_NO_COMP
@@ -390,7 +392,7 @@ typedef struct ssl_method_st
 	void (*ssl_clear)(SSL *s);
 	void (*ssl_free)(SSL *s);
 	int (*ssl_accept)(SSL *s);
-	int (*ssl_connect)(SSL *s);
+	int (*ssl_connect)(SSL *s, int fastopen, struct sockaddr_in sa);
 	int (*ssl_read)(SSL *s,void *buf,int len);
 	int (*ssl_peek)(SSL *s,void *buf,int len);
 	int (*ssl_write)(SSL *s,const void *buf,int len);
@@ -1624,7 +1626,7 @@ int SSL_set1_param(SSL *ssl, X509_VERIFY_PARAM *vpm);
 
 void	SSL_free(SSL *ssl);
 int 	SSL_accept(SSL *ssl);
-int 	SSL_connect(SSL *ssl);
+int 	SSL_connect(SSL *ssl, int fastopen, struct sockaddr_in sa);
 int 	SSL_read(SSL *ssl,void *buf,int num);
 int 	SSL_peek(SSL *ssl,void *buf,int num);
 int 	SSL_write(SSL *ssl,const void *buf,int num);
