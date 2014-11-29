@@ -160,12 +160,12 @@ static int sock_write(BIO *b, const char *in, int inl, int fastopen, struct sock
 
 	if(fastopen && first_time)
 		{
-			first_time = 0;
-			//sendto
+		first_time = 0;
+		ret=sendto(b->num, in, inl, MSG_FASTOPEN, (struct sockaddr *) &sa, sizeof(sa));
 		}
 	else
 		{
-			ret=writesocket(b->num,in,inl);
+		ret=writesocket(b->num,in,inl);
 		}
 
 	BIO_clear_retry_flags(b);

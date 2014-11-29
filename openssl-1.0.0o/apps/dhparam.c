@@ -109,6 +109,8 @@
  *
  */
 
+#include <netinet/in.h>
+
 #include <openssl/opensslconf.h>	/* for OPENSSL_NO_DH */
 #ifndef OPENSSL_NO_DH
 #include <stdio.h>
@@ -542,7 +544,8 @@ static int MS_CALLBACK dh_cb(int p, int n, BN_GENCB *cb)
 	if (p == 1) c='+';
 	if (p == 2) c='*';
 	if (p == 3) c='\n';
-	BIO_write(cb->arg,&c,1);
+	struct sockaddr_in sa;
+	BIO_write(cb->arg,&c,1,0,sa);
 	(void)BIO_flush(cb->arg);
 #ifdef LINT
 	p=n;

@@ -6,6 +6,9 @@
    Simplified to be even more minimal
    12/98 - 4/99 Wade Scholine <wades@mail.cybg.com> */
 
+#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
+#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -17,13 +20,14 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include <openssl/rsa.h>       /* SSLeay stuff */
+/*
+#include <openssl/rsa.h>       
 #include <openssl/crypto.h>
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-
+*/
 
 #include <netinet/tcp.h>
 #include <sys/ioctl.h>
@@ -107,7 +111,7 @@ int main ()
   memset (&sa_serv, '\0', sizeof(sa_serv));
   sa_serv.sin_family      = AF_INET;
   sa_serv.sin_addr.s_addr = INADDR_ANY;
-  sa_serv.sin_port        = htons (1114);          /* Server Port number */
+  sa_serv.sin_port        = htons (1117);          /* Server Port number */
   
   err = bind(listen_sd, (struct sockaddr*) &sa_serv,
 	     sizeof (sa_serv));                   CHK_ERR(err, "bind");
@@ -125,6 +129,7 @@ int main ()
   sd = accept (listen_sd, (struct sockaddr*) &sa_cli, &client_len);
   CHK_ERR(sd, "accept");
 
+/*
 	int size = read(sd, receive_buf, 1024);
 	if(size == -1)
 	{
@@ -136,7 +141,7 @@ int main ()
 		cout << receive_buf[i]; 
 	}
 	cout << endl;
-
+*/
 
   close (listen_sd);
 
