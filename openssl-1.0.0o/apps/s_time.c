@@ -591,10 +591,9 @@ static SSL *doConnection(SSL *scon)
 		SSL_set_session(serverCon,SSL_get_session(scon));
 #endif
 
-	struct sockaddr_in sa;
 	/* ok, lets connect */
 	for(;;) {
-		i=SSL_connect(serverCon, 0, sa);
+		i=SSL_connect(serverCon);
 		if (BIO_sock_should_retry(i))
 			{
 			BIO_printf(bio_err,"DELAY\n");

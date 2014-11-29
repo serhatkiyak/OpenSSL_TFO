@@ -698,8 +698,7 @@ static int ssl23_get_server_hello(SSL *s)
 	if (!ssl_get_new_session(s,0))
 		goto err;
 
-	struct sockaddr_in sa;
-	return(SSL_connect(s, 0, sa));
+	return(SSL_connect(s));
 err:
 	return(-1);
 	}

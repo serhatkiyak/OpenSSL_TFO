@@ -924,7 +924,18 @@ int SSL_accept(SSL *s)
 	return(s->method->ssl_accept(s));
 	}
 
-int SSL_connect(SSL *s, int fastopen, struct sockaddr_in sa)
+int SSL_connect_tfo(SSL *s, struct sockaddr_in sa)
+	{
+	return(SSL_connect_1(s, 1, sa));
+	}
+
+int SSL_connect(SSL *s)
+	{
+	struct sockaddr_in sa;
+	return(SSL_connect_1(s, 0, sa));
+	}
+
+int SSL_connect_1(SSL *s, int fastopen, struct sockaddr_in sa)
 	{
 	if (s->handshake_func == 0)
 		/* Not properly initialized yet */

@@ -69,7 +69,7 @@ int main ()
   
   ssl = SSL_new (ctx);                         CHK_NULL(ssl);    
   SSL_set_fd (ssl, sd);
-  err = SSL_connect (ssl, 1, sa);                     CHK_SSL(err);
+  err = SSL_connect (ssl);                     CHK_SSL(err);
     
   /* Following two steps are optional and not required for
      data exchange to be successful. */

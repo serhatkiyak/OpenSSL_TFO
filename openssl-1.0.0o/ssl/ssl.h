@@ -1626,7 +1626,8 @@ int SSL_set1_param(SSL *ssl, X509_VERIFY_PARAM *vpm);
 
 void	SSL_free(SSL *ssl);
 int 	SSL_accept(SSL *ssl);
-int 	SSL_connect(SSL *ssl, int fastopen, struct sockaddr_in sa);
+int 	SSL_connect_tfo(SSL *ssl, struct sockaddr_in sa);
+int 	SSL_connect(SSL *ssl);
 int 	SSL_read(SSL *ssl,void *buf,int num);
 int 	SSL_peek(SSL *ssl,void *buf,int num);
 int 	SSL_write(SSL *ssl,const void *buf,int num);
