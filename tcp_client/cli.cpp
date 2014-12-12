@@ -103,13 +103,13 @@ int main ()
   /* --------------------------------------------------- */
   /* DATA EXCHANGE - Send a message and receive a reply. */
 
-/*
+
   err = SSL_write (ssl, "Hello World!", strlen("Hello World!"));  CHK_SSL(err);
   
   err = SSL_read (ssl, buf, sizeof(buf) - 1);                     CHK_SSL(err);
   buf[err] = '\0';
   printf ("Got %d chars:'%s'\n", err, buf);
-*/
+
 
   // SSL_SESSION* sess = SSL_get1_session(ssl); 
 

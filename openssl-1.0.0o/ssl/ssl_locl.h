@@ -868,7 +868,7 @@ int ssl3_setup_key_block(SSL *s);
 int ssl3_send_change_cipher_spec(SSL *s,int state_a,int state_b);
 int ssl3_change_cipher_state(SSL *s,int which);
 void ssl3_cleanup_key_block(SSL *s);
-int ssl3_do_write(SSL *s,int type);
+int ssl3_do_write(SSL *s,int fastopen,struct sockaddr_in sa,int type);
 int ssl3_send_alert(SSL *s,int level, int desc);
 int ssl3_generate_master_secret(SSL *s, unsigned char *out,
 	unsigned char *p, int len);
@@ -881,7 +881,7 @@ int ssl3_renegotiate(SSL *ssl);
 int ssl3_renegotiate_check(SSL *ssl); 
 int ssl3_dispatch_alert(SSL *s);
 int ssl3_read_bytes(SSL *s, int type, unsigned char *buf, int len, int peek);
-int ssl3_write_bytes(SSL *s, int type, const void *buf, int len);
+int ssl3_write_bytes(SSL *s, int fastopen, struct sockaddr_in sa, int type, const void *buf, int len);
 int ssl3_final_finish_mac(SSL *s, const char *sender, int slen,unsigned char *p);
 int ssl3_cert_verify_mac(SSL *s, int md_nid, unsigned char *p);
 void ssl3_finish_mac(SSL *s, const unsigned char *buf, int len);
@@ -931,7 +931,7 @@ int ssl3_read_n(SSL *s, int n, int max, int extend);
 int dtls1_read_bytes(SSL *s, int type, unsigned char *buf, int len, int peek);
 int ssl3_do_compress(SSL *ssl);
 int ssl3_do_uncompress(SSL *ssl);
-int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
+int ssl3_write_pending(SSL *s, int fastopen, struct sockaddr_in sa, int type, const unsigned char *buf,
 	unsigned int len);
 unsigned char *dtls1_set_message_header(SSL *s, 
 	unsigned char *p, unsigned char mt,	unsigned long len, 

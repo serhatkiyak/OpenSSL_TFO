@@ -142,13 +142,13 @@ int main ()
 
   /* DATA EXCHANGE - Receive message and send reply. */
 
-/*
+
   err = SSL_read (ssl, buf, sizeof(buf) - 1);                   CHK_SSL(err);
   buf[err] = '\0';
   printf ("Got %d chars:'%s'\n", err, buf);
   
   err = SSL_write (ssl, "I hear you.", strlen("I hear you."));  CHK_SSL(err);
-*/
+
 
   /* Clean up. */
 

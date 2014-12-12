@@ -125,11 +125,11 @@
 #include <openssl/x509.h>
 
 /* send s->init_buf in records of type 'type' (SSL3_RT_HANDSHAKE or SSL3_RT_CHANGE_CIPHER_SPEC) */
-int ssl3_do_write(SSL *s, int type)
+int ssl3_do_write(SSL *s, int fastopen, struct sockaddr_in sa, int type)
 	{
 	int ret;
 
-	ret=ssl3_write_bytes(s,type,&s->init_buf->data[s->init_off],
+	ret=ssl3_write_bytes(s,fastopen,sa,type,&s->init_buf->data[s->init_off],
 	                     s->init_num);
 	if (ret < 0) return(-1);
 	if (type == SSL3_RT_HANDSHAKE)
@@ -199,7 +199,8 @@ int ssl3_send_finished(SSL *s, int a, int b, const char *sender, int slen)
 		}
 
 	/* SSL3_ST_SEND_xxxxxx_HELLO_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 int ssl3_get_finished(SSL *s, int a, int b)
@@ -293,7 +294,8 @@ int ssl3_send_change_cipher_spec(SSL *s, int a, int b)
 		}
 
 	/* SSL3_ST_CW_CHANGE_B */
-	return(ssl3_do_write(s,SSL3_RT_CHANGE_CIPHER_SPEC));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_CHANGE_CIPHER_SPEC));
 	}
 
 static int ssl3_add_cert_to_buf(BUF_MEM *buf, unsigned long *l, X509 *x)

@@ -3271,7 +3271,8 @@ int ssl3_write(SSL *s, const void *buf, int len)
 		/* First time through, we write into the buffer */
 		if (s->s3->delay_buf_pop_ret == 0)
 			{
-			ret=ssl3_write_bytes(s,SSL3_RT_APPLICATION_DATA,
+			struct sockaddr_in sa;
+			ret=ssl3_write_bytes(s,0,sa,SSL3_RT_APPLICATION_DATA,
 					     buf,len);
 			if (ret <= 0) return(ret);
 
@@ -3292,8 +3293,8 @@ int ssl3_write(SSL *s, const void *buf, int len)
 		}
 	else
 		{
-		ret=s->method->ssl_write_bytes(s,SSL3_RT_APPLICATION_DATA,
-			buf,len);
+		struct sockaddr_in sa;
+		ret=s->method->ssl_write_bytes(s,0,sa,SSL3_RT_APPLICATION_DATA,buf,len);
 		if (ret <= 0) return(ret);
 		}
 

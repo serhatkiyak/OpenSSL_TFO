@@ -82,7 +82,7 @@ int main ()
  
   SSL_load_error_strings();
   SSLeay_add_ssl_algorithms();
-  meth = SSLv23_server_method();
+  meth = TLSv1_server_method();
   ctx = SSL_CTX_new (meth);
   if (!ctx) {
     ERR_print_errors_fp(stderr);
@@ -184,13 +184,13 @@ int main ()
 
   /* DATA EXCHANGE - Receive message and send reply. */
 
-/*
+
   err = SSL_read (ssl, buf, sizeof(buf) - 1);                   CHK_SSL(err);
   buf[err] = '\0';
   printf ("Got %d chars:'%s'\n", err, buf);
   
   err = SSL_write (ssl, "I hear you.", strlen("I hear you."));  CHK_SSL(err);
-*/
+
 
   /* Clean up. */
 

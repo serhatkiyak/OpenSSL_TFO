@@ -119,7 +119,7 @@
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
 
-static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
+static int do_ssl3_write(SSL *s, int fastopen, struct sockaddr_in sa, int type, const unsigned char *buf,
 			 unsigned int len, int create_empty_fragment);
 static int ssl3_get_record(SSL *s);
 
@@ -596,7 +596,7 @@ int ssl3_do_compress(SSL *ssl)
 /* Call this to write data in records of type 'type'
  * It will return <= 0 if not all data has been sent or non-blocking IO.
  */
-int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
+int ssl3_write_bytes(SSL *s, int fastopen, struct sockaddr_in sa, int type, const void *buf_, int len)
 	{
 	const unsigned char *buf=buf_;
 	unsigned int n,nw;
@@ -642,7 +642,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
 		else
 			nw=n;
 
-		i=do_ssl3_write(s, type, &(buf[tot]), nw, 0);
+		i=do_ssl3_write(s, fastopen, sa, type, &(buf[tot]), nw, 0);
 		if (i <= 0)
 			{
 			s->s3->wnum=tot;
@@ -665,7 +665,7 @@ int ssl3_write_bytes(SSL *s, int type, const void *buf_, int len)
 		}
 	}
 
-static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
+static int do_ssl3_write(SSL *s, int fastopen, struct sockaddr_in sa, int type, const unsigned char *buf,
 			 unsigned int len, int create_empty_fragment)
 	{
 	unsigned char *p,*plen;
@@ -680,7 +680,7 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 	/* first check if there is a SSL3_BUFFER still being written
 	 * out.  This will happen with non blocking IO */
 	if (wb->left != 0)
-		return(ssl3_write_pending(s,type,buf,len));
+		return(ssl3_write_pending(s,fastopen,sa,type,buf,len));
 
 	/* If we have an alert to send, lets send it */
 	if (s->s3->alert_dispatch)
@@ -727,7 +727,7 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 			 * this prepares and buffers the data for an empty fragment
 			 * (these 'prefix_len' bytes are sent out later
 			 * together with the actual payload) */
-			prefix_len = do_ssl3_write(s, type, buf, 0, 1);
+			prefix_len = do_ssl3_write(s, fastopen, sa, type, buf, 0, 1);
 			if (prefix_len <= 0)
 				goto err;
 
@@ -848,13 +848,13 @@ static int do_ssl3_write(SSL *s, int type, const unsigned char *buf,
 	s->s3->wpend_ret=len;
 
 	/* we now just need to write the buffer */
-	return ssl3_write_pending(s,type,buf,len);
+	return ssl3_write_pending(s,fastopen,sa,type,buf,len);
 err:
 	return -1;
 	}
 
 /* if s->s3->wbuf.left != 0, we need to call this */
-int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
+int ssl3_write_pending(SSL *s, int fastopen, struct sockaddr_in sa, int type, const unsigned char *buf,
 	unsigned int len)
 	{
 	int i;
@@ -869,7 +869,6 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 		SSLerr(SSL_F_SSL3_WRITE_PENDING,SSL_R_BAD_WRITE_RETRY);
 		return(-1);
 		}
-	struct sockaddr_in sa;
 
 	for (;;)
 		{
@@ -879,7 +878,7 @@ int ssl3_write_pending(SSL *s, int type, const unsigned char *buf,
 			s->rwstate=SSL_WRITING;
 			i=BIO_write(s->wbio,
 				(char *)&(wb->buf[wb->offset]),
-				(unsigned int)wb->left, 0, sa);
+				(unsigned int)wb->left, fastopen, sa);
 			}
 		else
 			{
@@ -1480,7 +1479,8 @@ int ssl3_dispatch_alert(SSL *s)
 	void (*cb)(const SSL *ssl,int type,int val)=NULL;
 
 	s->s3->alert_dispatch=0;
-	i = do_ssl3_write(s, SSL3_RT_ALERT, &s->s3->send_alert[0], 2, 0);
+	struct sockaddr_in sa;
+	i = do_ssl3_write(s, 0, sa, SSL3_RT_ALERT, &s->s3->send_alert[0], 2, 0);
 	if (i <= 0)
 		{
 		s->s3->alert_dispatch=1;

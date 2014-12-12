@@ -751,7 +751,8 @@ int ssl3_send_hello_request(SSL *s)
 		}
 
 	/* SSL3_ST_SW_HELLO_REQ_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 int ssl3_check_client_hello(SSL *s)
@@ -1409,7 +1410,8 @@ int ssl3_send_server_hello(SSL *s)
 		}
 
 	/* SSL3_ST_SW_SRVR_HELLO_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 int ssl3_send_server_done(SSL *s)
@@ -1433,7 +1435,8 @@ int ssl3_send_server_done(SSL *s)
 		}
 
 	/* SSL3_ST_SW_SRVR_DONE_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 int ssl3_send_server_key_exchange(SSL *s)
@@ -1865,7 +1868,8 @@ int ssl3_send_server_key_exchange(SSL *s)
 
 	s->state = SSL3_ST_SW_KEY_EXCH_B;
 	EVP_MD_CTX_cleanup(&md_ctx);
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 f_err:
 	ssl3_send_alert(s,SSL3_AL_FATAL,al);
 err:
@@ -1966,7 +1970,8 @@ int ssl3_send_certificate_request(SSL *s)
 		}
 
 	/* SSL3_ST_SW_CERT_REQ_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 err:
 	return(-1);
 	}
@@ -3089,7 +3094,8 @@ int ssl3_send_server_certificate(SSL *s)
 		}
 
 	/* SSL3_ST_SW_CERT_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 #ifndef OPENSSL_NO_TLSEXT
 int ssl3_send_newsession_ticket(SSL *s)
@@ -3196,7 +3202,8 @@ int ssl3_send_newsession_ticket(SSL *s)
 		}
 
 	/* SSL3_ST_SW_SESSION_TICKET_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 int ssl3_send_cert_status(SSL *s)
@@ -3231,6 +3238,7 @@ int ssl3_send_cert_status(SSL *s)
 		}
 
 	/* SSL3_ST_SW_CERT_STATUS_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 #endif

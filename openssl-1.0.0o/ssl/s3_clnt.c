@@ -726,7 +726,7 @@ int ssl3_client_hello(SSL *s, int fastopen, struct sockaddr_in sa)
 		}
 
 	/* SSL3_ST_CW_CLNT_HELLO_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	return(ssl3_do_write(s,fastopen,sa,SSL3_RT_HANDSHAKE));
 err:
 	return(-1);
 	}
@@ -2762,7 +2762,8 @@ int ssl3_send_client_key_exchange(SSL *s)
 		}
 
 	/* SSL3_ST_CW_KEY_EXCH_B */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 err:
 #ifndef OPENSSL_NO_ECDH
 	BN_CTX_free(bn_ctx);
@@ -2887,7 +2888,8 @@ int ssl3_send_client_verify(SSL *s)
 		s->init_off=0;
 		}
 	EVP_PKEY_CTX_free(pctx);
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 err:
 	EVP_PKEY_CTX_free(pctx);
 	return(-1);
@@ -2966,7 +2968,8 @@ int ssl3_send_client_certificate(SSL *s)
 		s->init_off=0;
 		}
 	/* SSL3_ST_CW_CERT_D */
-	return(ssl3_do_write(s,SSL3_RT_HANDSHAKE));
+	struct sockaddr_in sa;
+	return(ssl3_do_write(s,0,sa,SSL3_RT_HANDSHAKE));
 	}
 
 #define has_bits(i,m)	(((i)&(m)) == (m))

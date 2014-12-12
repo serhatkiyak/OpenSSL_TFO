@@ -69,7 +69,7 @@ int main ()
   const SSL_METHOD *meth;
 
   SSLeay_add_ssl_algorithms();
-  meth = SSLv23_client_method();
+  meth = TLSv1_client_method();
   SSL_load_error_strings();
   ctx = SSL_CTX_new (meth);                        CHK_NULL(ctx);
 
@@ -94,7 +94,9 @@ int main ()
   /* Now we have TCP conncetion. Start SSL negotiation. */
   
   ssl = SSL_new (ctx);                         CHK_NULL(ssl);    
+
   SSL_set_fd (ssl, sd);
+
   err = SSL_connect_tfo (ssl, sa);                     CHK_SSL(err);
     
   /* Following two steps are optional and not required for
@@ -126,13 +128,13 @@ int main ()
   
   /* --------------------------------------------------- */
   /* DATA EXCHANGE - Send a message and receive a reply. */
-/*
+
   err = SSL_write (ssl, "Hello World!", strlen("Hello World!"));  CHK_SSL(err);
   
   err = SSL_read (ssl, buf, sizeof(buf) - 1);                     CHK_SSL(err);
   buf[err] = '\0';
   printf ("Got %d chars:'%s'\n", err, buf);
-*/
+
 
   SSL_shutdown (ssl);  /* send SSL/TLS close_notify */
 

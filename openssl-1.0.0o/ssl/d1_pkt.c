@@ -1375,7 +1375,8 @@ int do_dtls1_write(SSL *s, int type, const unsigned char *buf, unsigned int len,
 	if (s->s3->wbuf.left != 0)
 		{
 		OPENSSL_assert(0); /* XDTLS:  want to see if we ever get here */
-		return(ssl3_write_pending(s,type,buf,len));
+		struct sockaddr_in sa;
+		return(ssl3_write_pending(s,0,sa,type,buf,len));
 		}
 
 	/* If we have an alert to send, lets send it */
@@ -1563,7 +1564,8 @@ int do_dtls1_write(SSL *s, int type, const unsigned char *buf, unsigned int len,
 	s->s3->wpend_ret=len;
 
 	/* we now just need to write the buffer */
-	return ssl3_write_pending(s,type,buf,len);
+	struct sockaddr_in sa;
+	return ssl3_write_pending(s,0,sa,type,buf,len);
 err:
 	return -1;
 	}
