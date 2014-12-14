@@ -59,12 +59,13 @@ int main ()
  
   SSL_load_error_strings();
   SSLeay_add_ssl_algorithms();
-  meth = SSLv23_server_method();
+  meth = TLSv1_server_method();
   ctx = SSL_CTX_new (meth);
   if (!ctx) {
     ERR_print_errors_fp(stderr);
     exit(2);
   }
+  SSL_CTX_set_mode(ctx, SSL_MODE_HANDSHAKE_CUTTHROUGH);
   
   if (SSL_CTX_use_certificate_file(ctx, CERTF, SSL_FILETYPE_PEM) <= 0) {
     ERR_print_errors_fp(stderr);

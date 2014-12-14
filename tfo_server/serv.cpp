@@ -88,6 +88,8 @@ int main ()
     ERR_print_errors_fp(stderr);
     exit(2);
   }
+
+  SSL_CTX_set_mode(ctx, SSL_MODE_HANDSHAKE_CUTTHROUGH);
   
   if (SSL_CTX_use_certificate_file(ctx, CERTF, SSL_FILETYPE_PEM) <= 0) {
     ERR_print_errors_fp(stderr);

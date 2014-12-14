@@ -45,9 +45,10 @@ int main ()
   const SSL_METHOD *meth;
 
   SSLeay_add_ssl_algorithms();
-  meth = SSLv23_client_method();
+  meth = TLSv1_client_method();
   SSL_load_error_strings();
   ctx = SSL_CTX_new (meth);                        CHK_NULL(ctx);
+  SSL_CTX_set_mode(ctx, SSL_MODE_HANDSHAKE_CUTTHROUGH);
 
   CHK_SSL(err);
   

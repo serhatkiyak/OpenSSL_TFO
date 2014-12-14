@@ -607,15 +607,14 @@ typedef struct ssl_session_st
  * TLS only.)  "Released" buffers are put onto a free-list in the context
  * or just freed (depending on the context's setting for freelist_max_len). */
 #define SSL_MODE_RELEASE_BUFFERS 0x00000010L
-/* Send TLS_FALLBACK_SCSV in the ClientHello.
- * To be set by applications that reconnect with a downgraded protocol
- * version; see draft-ietf-tls-downgrade-scsv-00 for details. */
-#define SSL_MODE_SEND_FALLBACK_SCSV 0x00000080L
-
 /* When set, clients may send application data before receipt of CCS
  * and Finished.  This mode enables full-handshakes to 'complete' in
  * one RTT. */
 #define SSL_MODE_HANDSHAKE_CUTTHROUGH 0x00000020L
+/* Send TLS_FALLBACK_SCSV in the ClientHello.
+ * To be set by applications that reconnect with a downgraded protocol
+ * version; see draft-ietf-tls-downgrade-scsv-00 for details. */
+#define SSL_MODE_SEND_FALLBACK_SCSV 0x00000080L
 
 /* Note: SSL[_CTX]_set_{options,mode} use |= op on the previous value,
  * they cannot be used to clear bits. */
