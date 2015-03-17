@@ -4,8 +4,10 @@ make
 make test
 make install
 
-g++ -g -o serv serv.cpp /home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/libssl.a /home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/libcrypto.a -ldl
-g++ -g -o cli cli.cpp /home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/libssl.a /home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/libcrypto.a -ldl
+sudo apt-get install libssl-dev
+
+g++ -g -o serv serv.cpp /home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/libssl.a /home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/libcrypto.a -ldl
+g++ -g -o cli cli.cpp /home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/libssl.a /home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/libcrypto.a -ldl
 
 
 sudo pkill -9 serv

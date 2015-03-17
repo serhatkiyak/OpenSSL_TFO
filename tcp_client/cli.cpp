@@ -6,8 +6,8 @@
    12/98 - 4/99 Wade Scholine <wades@mail.cybg.com> */
 
 
-#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
-#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
+#include "/home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
+#include "/home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -71,6 +71,9 @@ int main ()
   ssl = SSL_new (ctx);                         CHK_NULL(ssl);    
   SSL_set_fd (ssl, sd);
   err = SSL_connect (ssl);                     CHK_SSL(err);
+  
+  int false_start = SSL_cutthrough_complete(ssl);
+  printf("SERHAT: false_start: %d\n", false_start);
     
   /* Following two steps are optional and not required for
      data exchange to be successful. */

@@ -7,8 +7,8 @@
    12/98 - 4/99 Wade Scholine <wades@mail.cybg.com> */
 
 
-#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
-#include "/home/serhat/Desktop/OpenSSL_git/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
+#include "/home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/include/openssl/ssl.h"
+#include "/home/serhat/Desktop/OpenSSL_TFO/openssl-1.0.0o/include/openssl/err.h"
 
 
 #include <stdio.h>
